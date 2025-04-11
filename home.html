@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - Blossom</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lato:wght@300;400;700&display=swap">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* Dashboard specific styles */
+    body {
+      background-color: var(--primary-light);
+    }
+    
+    .dashboard {
+      padding: var(--space-xxl) 0;
+    }
+    
+    .greeting-card {
+      background: linear-gradient(135deg, var(--accent), #d4b2c2);
+      color: var(--white);
+      border-radius: var(--border-radius-lg);
+      padding: var(--space-xl);
+      margin-bottom: var(--space-xl);
+      box-shadow: var(--shadow-md);
+    }
+    
+    .greeting-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--space-md);
+    }
+    
+    .greeting-title {
+      font-size: var(--font-size-xl);
+      font-weight: 600;
+    }
+    
+    .date {
+      font-size: var(--font-size-sm);
+      opacity: 0.9;
+    }
+    
+    .mood-summary {
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+      margin-top: var(--space-md);
+    }
+    
+    .mood-emoji {
+      font-size: 2.5rem;
+    }
+    
+    .suggestion {
+      background-color: rgba(255, 255, 255, 0.2);
+      padding: var(--space-md);
+      border-radius: var(--border-radius-md);
+      margin-top: var(--space-md);
+    }
+    
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: var(--space-lg);
+      margin-top: var(--space-xl);
+    }
+    
+    .feature-card {
+      background-color: var(--white);
+      border-radius: var(--border-radius-md);
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+      transition: all var(--transition-medium);
+      cursor: pointer;
+    }
+    
+    .feature-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-lg);
+    }
+    
+    .feature-icon {
+      width: 100%;
+      padding: var(--space-lg);
+      font-size: 2.5rem;
+      text-align: center;
+      background-color: var(--primary-medium);
+      color: var(--accent);
+    }
+    
+    .feature-content {
+      padding: var(--space-lg);
+    }
+    
+    .feature-title {
+      font-size: var(--font-size-lg);
+      margin-bottom: var(--space-sm);
+    }
+    
+    .feature-description {
+      color: var(--text-medium);
+      font-size: var(--font-size-sm);
+    }
+    
+    .notification-badge {
+      display: inline-block;
+      background-color: var(--accent);
+      color: white;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      text-align: center;
+      line-height: 24px;
+      font-size: var(--font-size-xs);
+      margin-left: var(--space-sm);
+    }
+    
+    .logout-button {
+      margin-left: auto;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="container">
+      <div class="header-content">
+        <div class="logo">
+          <svg width="40" height="40" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="45" fill="#f9dfe7" />
+            <path d="M50,30 Q60,20 50,10 Q40,20 50,30 Z" fill="#c9a4b4" />
+            <path d="M70,50 Q80,40 90,50 Q80,60 70,50 Z" fill="#c9a4b4" />
+            <path d="M50,70 Q60,80 50,90 Q40,80 50,70 Z" fill="#c9a4b4" />
+            <path d="M30,50 Q20,40 10,50 Q20,60 30,50 Z" fill="#c9a4b4" />
+            <circle cx="50" cy="50" r="15" fill="#e9dee8" />
+          </svg>
+          <span class="logo-text">Blossom</span>
+        </div>
+        <button id="logout-btn" class="btn btn-secondary logout-button">Logout</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Dashboard -->
+  <section class="dashboard">
+    <div class="container">
+      <!-- Greeting Card -->
+      <div class="greeting-card fade-in">
+        <div class="greeting-header">
+          <h2 class="greeting-title">Hello, <span id="user-name">there</span></h2>
+          <span class="date" id="current-date"></span>
+        </div>
+        <p>Welcome to your personal space for healing and support.</p>
+        
+        <div class="mood-summary">
+          <div class="mood-emoji" id="mood-emoji">😊</div>
+          <div>
+            <p>Today's mood: <span id="mood-text">Good</span></p>
+            <p id="mood-update-prompt">You haven't tracked your mood today.</p>
+          </div>
+        </div>
+        
+        <div class="suggestion">
+          <p id="daily-suggestion">Taking one small step each day is all it takes to move forward. What small act of self-care can you do today?</p>
+        </div>
+      </div>
+      
+      <!-- Feature Grid -->
+      <div class="feature-grid">
+        <!-- Chatbot -->
+        <div class="feature-card" id="chatbot-card">
+          <div class="feature-icon">🤖</div>
+          <div class="feature-content">
+            <h3 class="feature-title">Chatbot</h3>
+            <p class="feature-description">Talk to our supportive companion anytime you need someone to listen.</p>
+          </div>
+        </div>
+        
+        <!-- Mood Tracker -->
+        <div class="feature-card" id="mood-tracker-card">
+          <div class="feature-icon">😊</div>
+          <div class="feature-content">
+            <h3 class="feature-title">Mood Tracker <span class="notification-badge">!</span></h3>
+            <p class="feature-description">Record your daily emotions to identify patterns and progress.</p>
+          </div>
+        </div>
+        
+        <!-- Daily Log -->
+        <div class="feature-card" id="daily-log-card">
+          <div class="feature-icon">📓</div>
+          <div class="feature-content">
+            <h3 class="feature-title">Daily Log</h3>
+            <p class="feature-description">Keep a private journal of your thoughts and feelings.</p>
+          </div>
+        </div>
+        
+        <!-- Profile -->
+        <div class="feature-card" id="profile-card">
+          <div class="feature-icon">🧍‍♀️</div>
+          <div class="feature-content">
+            <h3 class="feature-title">Profile</h3>
+            <p class="feature-description">Manage your personal information and preferences.</p>
+          </div>
+        </div>
+        
+        <!-- Symptom Checker -->
+        <div class="feature-card" id="symptom-checker-card">
+          <div class="feature-icon">🩺</div>
+          <div class="feature-content">
+            <h3 class="feature-title">Symptom Checker</h3>
+            <p class="feature-description">Monitor physical symptoms and get guidance when needed.</p>
+          </div>
+        </div>
+        
+        <!-- Assessment Tools -->
+        <div class="feature-card" id="assessment-tools-card">
+          <div class="feature-icon">🧠</div>
+          <div class="feature-content">
+            <h3 class="feature-title">Assessment Tools</h3>
+            <p class="feature-description">Access psychological tools to help track your emotional wellbeing.</p>
+          </div>
+        </div>
+        
+        <!-- NHS Support -->
+        <div class="feature-card" id="nhs-support-card">
+          <div class="feature-icon">📞</div>
+          <div class="feature-content">
+            <h3 class="feature-title">NHS Support</h3>
+            <p class="feature-description">Find professional resources and helplines for additional support.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bottom">
+        <p>&copy; 2025 Blossom v1.0 | <a href="#">Feedback</a> | <a href="#">Privacy Policy</a></p>
+        <p class="text-muted">This app is for support only and does not replace professional medical advice.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/storage.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Authentication check
+      if (!Storage.isAuthenticated()) {
+        window.location.href = 'auth.html';
+        return;
+      }
+      
+      // Get current user
+      const currentUser = Storage.getCurrentUser();
+      const username = currentUser.username;
+      
+      // Questionnaire check
+      if (!Storage.hasCompletedQuestionnaire(username)) {
+        window.location.href = 'questionnaire.html';
+        return;
+      }
+      
+      // Update user name
+      const userNameElement = document.getElementById('user-name');
+      userNameElement.textContent = username;
+      
+      // Update current date
+      const dateElement = document.getElementById('current-date');
+      const today = new Date();
+      dateElement.textContent = today.toLocaleDateString('en-US', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      });
+      
+      // Daily suggestions
+      const suggestions = [
+        "Taking one small step each day is all it takes to move forward. What small act of self-care can you do today?",
+        "Your emotions are valid. Be gentle with yourself as you navigate them.",
+        "Remember to breathe deeply when things feel overwhelming. Inhale calm, exhale tension.",
+        "Healing has no timeline. Trust your journey and honor where you are today.",
+        "Connecting with others who understand can be helpful. Consider reaching out to someone you trust.",
+        "Nurturing your body is part of healing. Simple nourishment matters.",
+        "Some days will be harder than others. That's a normal part of the healing process."
+      ];
+      
+      // Set random suggestion
+      const suggestionElement = document.getElementById('daily-suggestion');
+      suggestionElement.textContent = suggestions[Math.floor(Math.random() * suggestions.length)];
+      
+      // Get latest mood if available
+      const moodData = Storage.getMoodData(username);
+      const moodEmojiElement = document.getElementById('mood-emoji');
+      const moodTextElement = document.getElementById('mood-text');
+      const moodPromptElement = document.getElementById('mood-update-prompt');
+      
+      if (moodData && moodData.entries.length > 0) {
+        // Sort entries by date (newest first)
+        const sortedEntries = [...moodData.entries].sort((a, b) => 
+          new Date(b.timestamp) - new Date(a.timestamp)
+        );
+        
+        const latestEntry = sortedEntries[0];
+        const entryDate = new Date(latestEntry.timestamp).toLocaleDateString();
+        const todayDate = today.toLocaleDateString();
+        
+        // Check if the latest entry is from today
+        if (entryDate === todayDate) {
+          // Update mood display
+          const moodEmojis = ['😞', '😔', '😐', '🙂', '😊'];
+          const moodTexts = ['Very low', 'Low', 'Neutral', 'Good', 'Very good'];
+          
+          const moodLevel = latestEntry.mood;
+          moodEmojiElement.textContent = moodEmojis[moodLevel - 1];
+          moodTextElement.textContent = moodTexts[moodLevel - 1];
+          moodPromptElement.textContent = 'Updated today';
+          
+          // Hide notification badge
+          document.querySelector('.notification-badge').style.display = 'none';
+        } else {
+          moodPromptElement.textContent = "You haven't tracked your mood today.";
+        }
+      }
+      
+      // Add card click event listeners
+      document.getElementById('chatbot-card').addEventListener('click', () => {
+        window.location.href = 'chat.html';
+      });
+      
+      document.getElementById('mood-tracker-card').addEventListener('click', () => {
+        window.location.href = 'mood-tracker.html';
+      });
+      
+      document.getElementById('daily-log-card').addEventListener('click', () => {
+        window.location.href = 'daily-log.html';
+      });
+      
+      document.getElementById('profile-card').addEventListener('click', () => {
+        window.location.href = 'profile.html';
+      });
+      
+      document.getElementById('symptom-checker-card').addEventListener('click', () => {
+        window.location.href = 'symptom-checker.html';
+      });
+      
+      document.getElementById('assessment-tools-card').addEventListener('click', () => {
+        window.location.href = 'assessment-tools.html';
+      });
+      
+      document.getElementById('nhs-support-card').addEventListener('click', () => {
+        window.location.href = 'nhs-contact.html';
+      });
+      
+      // Logout functionality
+      document.getElementById('logout-btn').addEventListener('click', () => {
+        Storage.clearCurrentUser();
+        window.location.href = 'index.html';
+      });
+    });
+  </script>
+</body>
+</html>

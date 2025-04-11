@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Initial Assessment - Blossom</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lato:wght@300;400;700&display=swap">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* Questionnaire page specific styles */
+    body {
+      background: linear-gradient(135deg, var(--primary-light), var(--primary-medium));
+    }
+    
+    .questionnaire-container {
+      min-height: calc(100vh - 150px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: var(--space-xxl) 0;
+    }
+    
+    .questionnaire-card {
+      background-color: var(--white);
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--shadow-lg);
+      width: 100%;
+      max-width: 600px;
+      overflow: hidden;
+    }
+    
+    .questionnaire-header {
+      background-color: var(--primary-medium);
+      padding: var(--space-xl);
+      text-align: center;
+      position: relative;
+    }
+    
+    .progress-container {
+      margin-top: var(--space-md);
+      background-color: var(--primary-dark);
+      height: 8px;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    
+    .progress-bar {
+      height: 100%;
+      background-color: var(--accent);
+      transition: width var(--transition-medium);
+    }
+    
+    .questionnaire-body {
+      padding: var(--space-xl);
+    }
+    
+    .question {
+      display: none;
+      animation: fadeIn var(--transition-medium);
+    }
+    
+    .question.active {
+      display: block;
+    }
+    
+    .question-title {
+      font-size: var(--font-size-lg);
+      margin-bottom: var(--space-lg);
+    }
+    
+    .question-description {
+      color: var(--text-medium);
+      margin-bottom: var(--space-lg);
+    }
+    
+    /* Slider styles */
+    .slider-container {
+      margin: var(--space-xl) 0;
+    }
+    
+    .slider {
+      -webkit-appearance: none;
+      width: 100%;
+      height: 8px;
+      border-radius: 4px;
+      background: var(--primary-dark);
+      outline: none;
+      margin-bottom: var(--space-md);
+    }
+    
+    .slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--accent);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+    
+    .slider::-webkit-slider-thumb:hover {
+      transform: scale(1.1);
+    }
+    
+    .slider-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: var(--font-size-sm);
+      color: var(--text-medium);
+    }
+    
+    /* Radio styles */
+    .radio-options {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+      margin: var(--space-xl) 0;
+    }
+    
+    .radio-option {
+      display: flex;
+      align-items: center;
+      padding: var(--space-md);
+      border: 1px solid var(--primary-dark);
+      border-radius: var(--border-radius-md);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+    
+    .radio-option:hover {
+      background-color: var(--primary-light);
+    }
+    
+    .radio-option.selected {
+      background-color: var(--primary-medium);
+      border-color: var(--accent);
+    }
+    
+    .radio-option input {
+      margin-right: var(--space-md);
+    }
+    
+    /* Text area styles */
+    .text-input {
+      margin: var(--space-xl) 0;
+    }
+    
+    .text-area {
+      width: 100%;
+      min-height: 120px;
+      padding: var(--space-md);
+      border-radius: var(--border-radius-md);
+      border: 1px solid var(--primary-dark);
+      font-family: var(--font-primary);
+      resize: vertical;
+      transition: border var(--transition-fast);
+    }
+    
+    .text-area:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+    
+    /* Navigation buttons */
+    .question-actions {
+      display: flex;
+      justify-content: space-between;
+      margin-top: var(--space-xl);
+    }
+    
+    .btn-nav {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+    
+    .questionnaire-footer {
+      background-color: var(--primary-light);
+      padding: var(--space-md);
+      text-align: center;
+      color: var(--text-medium);
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="container">
+      <div class="header-content">
+        <div class="logo">
+          <svg width="40" height="40" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="45" fill="#f9dfe7" />
+            <path d="M50,30 Q60,20 50,10 Q40,20 50,30 Z" fill="#c9a4b4" />
+            <path d="M70,50 Q80,40 90,50 Q80,60 70,50 Z" fill="#c9a4b4" />
+            <path d="M50,70 Q60,80 50,90 Q40,80 50,70 Z" fill="#c9a4b4" />
+            <path d="M30,50 Q20,40 10,50 Q20,60 30,50 Z" fill="#c9a4b4" />
+            <circle cx="50" cy="50" r="15" fill="#e9dee8" />
+          </svg>
+          <span class="logo-text">Blossom</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Questionnaire Container -->
+  <section class="questionnaire-container">
+    <div class="questionnaire-card fade-in">
+      <div class="questionnaire-header">
+        <h2>Initial Assessment</h2>
+        <p>This helps us understand how to better support you</p>
+        <div class="progress-container">
+          <div class="progress-bar" id="progress-bar" style="width: 0%"></div>
+        </div>
+      </div>
+      
+      <div class="questionnaire-body">
+        <form id="questionnaire-form">
+          <!-- Question 1: Mood Slider -->
+          <div class="question active" data-question-id="q1">
+            <h3 class="question-title">How are you feeling today?</h3>
+            <p class="question-description">Please select where you are on the scale right now.</p>
+            
+            <div class="slider-container">
+              <input type="range" min="1" max="5" value="3" class="slider" id="mood-slider">
+              <div class="slider-labels">
+                <span>Very low</span>
+                <span>Low</span>
+                <span>Neutral</span>
+                <span>Good</span>
+                <span>Very good</span>
+              </div>
+            </div>
+            
+            <div class="question-actions">
+              <div></div>
+              <button type="button" class="btn btn-primary btn-nav next-question">
+                Next <span>&rarr;</span>
+              </button>
+            </div>
+          </div>
+          
+          <!-- Question 2: Support Radio Buttons -->
+          <div class="question" data-question-id="q2">
+            <h3 class="question-title">Do you feel supported by those around you?</h3>
+            <p class="question-description">Think about your friends, family, and healthcare providers.</p>
+            
+            <div class="radio-options">
+              <label class="radio-option">
+                <input type="radio" name="support" value="very-supported"> I feel very supported
+              </label>
+              <label class="radio-option">
+                <input type="radio" name="support" value="somewhat-supported"> I feel somewhat supported
+              </label>
+              <label class="radio-option">
+                <input type="radio" name="support" value="neutral"> I'm not sure
+              </label>
+              <label class="radio-option">
+                <input type="radio" name="support" value="somewhat-unsupported"> I feel somewhat unsupported
+              </label>
+              <label class="radio-option">
+                <input type="radio" name="support" value="very-unsupported"> I feel very unsupported
+              </label>
+            </div>
+            
+            <div class="question-actions">
+              <button type="button" class="btn btn-secondary btn-nav prev-question">
+                <span>&larr;</span> Previous
+              </button>
+              <button type="button" class="btn btn-primary btn-nav next-question">
+                Next <span>&rarr;</span>
+              </button>
+            </div>
+          </div>
+          
+          <!-- Question 3: Sleep Quality Slider -->
+          <div class="question" data-question-id="q3">
+            <h3 class="question-title">How has your sleep been recently?</h3>
+            <p class="question-description">Rate your overall sleep quality in the past week.</p>
+            
+            <div class="slider-container">
+              <input type="range" min="1" max="5" value="3" class="slider" id="sleep-slider">
+              <div class="slider-labels">
+                <span>Very poor</span>
+                <span>Poor</span>
+                <span>Fair</span>
+                <span>Good</span>
+                <span>Very good</span>
+              </div>
+            </div>
+            
+            <div class="question-actions">
+              <button type="button" class="btn btn-secondary btn-nav prev-question">
+                <span>&larr;</span> Previous
+              </button>
+              <button type="button" class="btn btn-primary btn-nav next-question">
+                Next <span>&rarr;</span>
+              </button>
+            </div>
+          </div>
+          
+          <!-- Question 4: Physical Symptoms -->
+          <div class="question" data-question-id="q4">
+            <h3 class="question-title">Are you experiencing any physical discomfort?</h3>
+            <p class="question-description">Select all that apply.</p>
+            
+            <div class="radio-options">
+              <label class="radio-option">
+                <input type="checkbox" name="symptoms" value="cramps"> Cramps or pain
+              </label>
+              <label class="radio-option">
+                <input type="checkbox" name="symptoms" value="bleeding"> Bleeding
+              </label>
+              <label class="radio-option">
+                <input type="checkbox" name="symptoms" value="fatigue"> Fatigue or exhaustion
+              </label>
+              <label class="radio-option">
+                <input type="checkbox" name="symptoms" value="headaches"> Headaches
+              </label>
+              <label class="radio-option">
+                <input type="checkbox" name="symptoms" value="nausea"> Nausea
+              </label>
+              <label class="radio-option">
+                <input type="checkbox" name="symptoms" value="other"> Other
+              </label>
+              <label class="radio-option">
+                <input type="checkbox" name="symptoms" value="none"> None of the above
+              </label>
+            </div>
+            
+            <div class="question-actions">
+              <button type="button" class="btn btn-secondary btn-nav prev-question">
+                <span>&larr;</span> Previous
+              </button>
+              <button type="button" class="btn btn-primary btn-nav next-question">
+                Next <span>&rarr;</span>
+              </button>
+            </div>
+          </div>
+          
+          <!-- Question 5: Free Text Response -->
+          <div class="question" data-question-id="q5">
+            <h3 class="question-title">Is there anything else you'd like to share?</h3>
+            <p class="question-description">This is a private space for your thoughts. We're here to listen.</p>
+            
+            <div class="text-input">
+              <textarea class="text-area" id="thoughts" placeholder="Your thoughts here..."></textarea>
+            </div>
+            
+            <div class="question-actions">
+              <button type="button" class="btn btn-secondary btn-nav prev-question">
+                <span>&larr;</span> Previous
+              </button>
+              <button type="submit" class="btn btn-primary btn-nav">
+                Complete <span>&rarr;</span>
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+      
+      <div class="questionnaire-footer">
+        <p id="encouraging-phrase">Every step you take is a step forward in your healing journey.</p>
+      </div>
+    </div>
+  </section>
+
+  <script src="js/storage.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Authentication check
+      if (!Storage.isAuthenticated()) {
+        window.location.href = 'auth.html';
+        return;
+      }
+      
+      // Elements
+      const progressBar = document.getElementById('progress-bar');
+      const questions = document.querySelectorAll('.question');
+      const encouragingPhrases = [
+        "Every step you take is a step forward in your healing journey.",
+        "Your feelings are valid and important.",
+        "Healing isn't linear, and that's okay.",
+        "You're showing incredible strength by being here.",
+        "Taking care of yourself is a form of courage."
+      ];
+      
+      // Variables
+      let currentQuestionIndex = 0;
+      const totalQuestions = questions.length;
+      
+      // Display random encouraging phrase
+      const phraseElement = document.getElementById('encouraging-phrase');
+      phraseElement.textContent = encouragingPhrases[Math.floor(Math.random() * encouragingPhrases.length)];
+      
+      // Update progress bar
+      function updateProgress() {
+        const progress = ((currentQuestionIndex + 1) / totalQuestions) * 100;
+        progressBar.style.width = `${progress}%`;
+      }
+      
+      // Navigate to specific question
+      function navigateToQuestion(index) {
+        // Hide all questions
+        questions.forEach(q => q.classList.remove('active'));
+        
+        // Show current question
+        questions[index].classList.add('active');
+        
+        // Update progress
+        currentQuestionIndex = index;
+        updateProgress();
+      }
+      
+      // Handle next question button clicks
+      document.querySelectorAll('.next-question').forEach(button => {
+        button.addEventListener('click', () => {
+          if (currentQuestionIndex < totalQuestions - 1) {
+            navigateToQuestion(currentQuestionIndex + 1);
+          }
+        });
+      });
+      
+      // Handle previous question button clicks
+      document.querySelectorAll('.prev-question').forEach(button => {
+        button.addEventListener('click', () => {
+          if (currentQuestionIndex > 0) {
+            navigateToQuestion(currentQuestionIndex - 1);
+          }
+        });
+      });
+      
+      // Radio option selection
+      document.querySelectorAll('.radio-option').forEach(option => {
+        option.addEventListener('click', function() {
+          const radio = this.querySelector('input[type="radio"]');
+          if (radio) {
+            // Deselect all options in the same group
+            document.querySelectorAll(`input[name="${radio.name}"]`).forEach(r => {
+              r.closest('.radio-option').classList.remove('selected');
+            });
+            
+            // Select this option
+            radio.checked = true;
+            this.classList.add('selected');
+          }
+        });
+      });
+      
+      // Checkbox selection (allow multiple)
+      document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+          if (this.checked) {
+            this.closest('.radio-option').classList.add('selected');
+          } else {
+            this.closest('.radio-option').classList.remove('selected');
+          }
+        });
+      });
+      
+      // Form submission
+      document.getElementById('questionnaire-form').addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        // Get current user
+        const currentUser = Storage.getCurrentUser();
+        
+        if (!currentUser) {
+          window.location.href = 'auth.html';
+          return;
+        }
+        
+        // Collect responses
+        const responses = [
+          {
+            questionId: 'q1',
+            question: 'How are you feeling today?',
+            answer: parseInt(document.getElementById('mood-slider').value),
+            timestamp: new Date().toISOString()
+          },
+          {
+            questionId: 'q2',
+            question: 'Do you feel supported by those around you?',
+            answer: document.querySelector('input[name="support"]:checked')?.value || 'not-answered',
+            timestamp: new Date().toISOString()
+          },
+          {
+            questionId: 'q3',
+            question: 'How has your sleep been recently?',
+            answer: parseInt(document.getElementById('sleep-slider').value),
+            timestamp: new Date().toISOString()
+          },
+          {
+            questionId: 'q4',
+            question: 'Are you experiencing any physical discomfort?',
+            answer: Array.from(document.querySelectorAll('input[name="symptoms"]:checked')).map(cb => cb.value),
+            timestamp: new Date().toISOString()
+          },
+          {
+            questionId: 'q5',
+            question: 'Is there anything else you\'d like to share?',
+            answer: document.getElementById('thoughts').value.trim(),
+            timestamp: new Date().toISOString()
+          }
+        ];
+        
+        // Save responses
+        Storage.saveQuestionnaireResponses(currentUser.username, responses);
+        
+        // Redirect to home
+        window.location.href = 'home.html';
+      });
+      
+      // Initialize
+      updateProgress();
+    });
+  </script>
+</body>
+</html>
