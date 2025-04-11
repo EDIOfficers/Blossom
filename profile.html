@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Profile - Blossom</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lato:wght@300;400;700&display=swap">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* Profile specific styles */
+    body {
+      background-color: var(--primary-light);
+    }
+    
+    .profile-container {
+      padding: var(--space-xxl) 0;
+    }
+    
+    .profile-card {
+      background-color: var(--white);
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--shadow-md);
+      padding: var(--space-xl);
+      margin-bottom: var(--space-xl);
+    }
+    
+    .profile-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: var(--space-lg);
+      padding-bottom: var(--space-md);
+      border-bottom: 1px solid var(--primary-dark);
+    }
+    
+    .profile-avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background-color: var(--primary-medium);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      color: var(--accent);
+      margin-right: var(--space-lg);
+    }
+    
+    .profile-info {
+      flex: 1;
+    }
+    
+    .profile-name {
+      font-size: var(--font-size-xl);
+      margin-bottom: var(--space-xs);
+    }
+    
+    .profile-date {
+      color: var(--text-medium);
+      font-size: var(--font-size-sm);
+    }
+    
+    .profile-section {
+      margin-bottom: var(--space-xl);
+    }
+    
+    .profile-section-title {
+      font-size: var(--font-size-lg);
+      margin-bottom: var(--space-md);
+      padding-bottom: var(--space-xs);
+      border-bottom: 1px solid var(--primary-dark);
+    }
+    
+    .form-row {
+      display: flex;
+      flex-wrap: wrap;
+      margin: 0 -var(--space-md) var(--space-lg);
+    }
+    
+    .form-col {
+      flex: 1;
+      min-width: 250px;
+      padding: 0 var(--space-md);
+    }
+    
+    .input-readonly {
+      background-color: var(--primary-light);
+      cursor: not-allowed;
+    }
+    
+    .preferences-list {
+      list-style: none;
+    }
+    
+    .preference-item {
+      margin-bottom: var(--space-md);
+      padding-bottom: var(--space-md);
+      border-bottom: 1px solid var(--primary-light);
+    }
+    
+    .preference-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--space-sm);
+    }
+    
+    .preference-title {
+      font-weight: 500;
+    }
+    
+    .toggle-switch {
+      position: relative;
+      display: inline-block;
+      width: 50px;
+      height: 24px;
+    }
+    
+    .toggle-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    
+    .toggle-slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: var(--primary-dark);
+      transition: var(--transition-fast);
+      border-radius: 24px;
+    }
+    
+    .toggle-slider:before {
+      position: absolute;
+      content: "";
+      height: 16px;
+      width: 16px;
+      left: 4px;
+      bottom: 4px;
+      background-color: var(--white);
+      transition: var(--transition-fast);
+      border-radius: 50%;
+    }
+    
+    input:checked + .toggle-slider {
+      background-color: var(--accent);
+    }
+    
+    input:checked + .toggle-slider:before {
+      transform: translateX(26px);
+    }
+    
+    .preference-description {
+      color: var(--text-medium);
+      font-size: var(--font-size-sm);
+    }
+    
+    .profile-activity {
+      background-color: var(--white);
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--shadow-md);
+      padding: var(--space-xl);
+    }
+    
+    .activity-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--space-lg);
+    }
+    
+    .activity-title {
+      font-size: var(--font-size-lg);
+      font-weight: 600;
+    }
+    
+    .activity-list {
+      list-style: none;
+    }
+    
+    .activity-item {
+      padding: var(--space-md);
+      margin-bottom: var(--space-md);
+      border-radius: var(--border-radius-md);
+      background-color: var(--primary-light);
+      display: flex;
+      align-items: center;
+    }
+    
+    .activity-icon {
+      width: 40px;
+      height: 40px;
+      background-color: var(--white);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      margin-right: var(--space-md);
+      color: var(--accent);
+    }
+    
+    .activity-content {
+      flex: 1;
+    }
+    
+    .activity-action {
+      font-weight: 500;
+      margin-bottom: 2px;
+    }
+    
+    .activity-date {
+      font-size: var(--font-size-sm);
+      color: var(--text-medium);
+    }
+    
+    .security-question {
+      margin-top: var(--space-lg);
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="container">
+      <div class="header-content">
+        <div class="logo">
+          <svg width="40" height="40" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="45" fill="#f9dfe7" />
+            <path d="M50,30 Q60,20 50,10 Q40,20 50,30 Z" fill="#c9a4b4" />
+            <path d="M70,50 Q80,40 90,50 Q80,60 70,50 Z" fill="#c9a4b4" />
+            <path d="M50,70 Q60,80 50,90 Q40,80 50,70 Z" fill="#c9a4b4" />
+            <path d="M30,50 Q20,40 10,50 Q20,60 30,50 Z" fill="#c9a4b4" />
+            <circle cx="50" cy="50" r="15" fill="#e9dee8" />
+          </svg>
+          <span class="logo-text">Blossom</span>
+        </div>
+        <nav class="nav">
+          <a href="home.html" class="nav-link">Dashboard</a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <!-- Profile Container -->
+  <section class="profile-container">
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <!-- Profile Card -->
+          <div class="profile-card fade-in">
+            <div class="profile-header">
+              <div class="profile-avatar" id="profile-avatar">
+                <span id="avatar-initial">A</span>
+              </div>
+              <div class="profile-info">
+                <h2 class="profile-name" id="profile-name">User Name</h2>
+                <p class="profile-date">Member since <span id="join-date">January 1, 2025</span></p>
+              </div>
+            </div>
+            
+            <form id="profile-form">
+              <!-- Personal Information -->
+              <div class="profile-section">
+                <h3 class="profile-section-title">Personal Information</h3>
+                <div class="form-row">
+                  <div class="form-col">
+                    <div class="form-group">
+                      <label for="username" class="form-label">Username</label>
+                      <input type="text" id="username" class="form-control input-readonly" readonly>
+                    </div>
+                  </div>
+                  <div class="form-col">
+                    <div class="form-group">
+                      <label for="email" class="form-label">Email</label>
+                      <input type="email" id="email" class="form-control">
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="form-row">
+                  <div class="form-col">
+                    <div class="form-group">
+                      <label for="display-name" class="form-label">Display Name (optional)</label>
+                      <input type="text" id="display-name" class="form-control" placeholder="How would you like to be addressed?">
+                    </div>
+                  </div>
+                  <div class="form-col">
+                    <div class="form-group">
+                      <label for="language" class="form-label">Language Preference</label>
+                      <select id="language" class="form-control">
+                        <option value="en">English</option>
+                        <option value="zh">中文 (Chinese)</option>
+                        <option value="es">Español (Spanish)</option>
+                        <option value="fr">Français (French)</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Preferences -->
+              <div class="profile-section">
+                <h3 class="profile-section-title">App Preferences</h3>
+                <ul class="preferences-list">
+                  <li class="preference-item">
+                    <div class="preference-header">
+                      <div class="preference-title">Daily Reminder</div>
+                      <label class="toggle-switch">
+                        <input type="checkbox" id="daily-reminder" checked>
+                        <span class="toggle-slider"></span>
+                      </label>
+                    </div>
+                    <p class="preference-description">Receive a gentle daily reminder to check in and track your mood</p>
+                  </li>
+                  
+                  <li class="preference-item">
+                    <div class="preference-header">
+                      <div class="preference-title">Weekly Summary</div>
+                      <label class="toggle-switch">
+                        <input type="checkbox" id="weekly-summary">
+                        <span class="toggle-slider"></span>
+                      </label>
+                    </div>
+                    <p class="preference-description">Get a weekly summary of your mood patterns and journal entries</p>
+                  </li>
+                  
+                  <li class="preference-item">
+                    <div class="preference-header">
+                      <div class="preference-title">Resource Suggestions</div>
+                      <label class="toggle-switch">
+                        <input type="checkbox" id="resource-suggestions" checked>
+                        <span class="toggle-slider"></span>
+                      </label>
+                    </div>
+                    <p class="preference-description">Allow Blossom to suggest resources based on your entries</p>
+                  </li>
+                  
+                  <li class="preference-item">
+                    <div class="preference-header">
+                      <div class="preference-title">Dark Mode</div>
+                      <label class="toggle-switch">
+                        <input type="checkbox" id="dark-mode">
+                        <span class="toggle-slider"></span>
+                      </label>
+                    </div>
+                    <p class="preference-description">Enable dark mode for comfortable nighttime use</p>
+                  </li>
+                </ul>
+              </div>
+              
+              <!-- Security -->
+              <div class="profile-section">
+                <h3 class="profile-section-title">Security</h3>
+                <div class="form-group">
+                  <label for="current-password" class="form-label">Current Password</label>
+                  <input type="password" id="current-password" class="form-control">
+                </div>
+                
+                <div class="form-row">
+                  <div class="form-col">
+                    <div class="form-group">
+                      <label for="new-password" class="form-label">New Password</label>
+                      <input type="password" id="new-password" class="form-control">
+                    </div>
+                  </div>
+                  <div class="form-col">
+                    <div class="form-group">
+                      <label for="confirm-password" class="form-label">Confirm New Password</label>
+                      <input type="password" id="confirm-password" class="form-control">
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="form-group security-question">
+                  <label for="security-question" class="form-label">Security Question</label>
+                  <select id="security-question" class="form-control">
+                    <option value="">Select a security question</option>
+                    <option value="q1">What was the name of your first pet?</option>
+                    <option value="q2">In what city were you born?</option>
+                    <option value="q3">What was your childhood nickname?</option>
+                    <option value="q4">What is your mother's maiden name?</option>
+                  </select>
+                </div>
+                
+                <div class="form-group">
+                  <label for="security-answer" class="form-label">Security Answer</label>
+                  <input type="text" id="security-answer" class="form-control">
+                </div>
+              </div>
+              
+              <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+              </div>
+            </form>
+          </div>
+        </div>
+        
+        <!-- Right Column -->
+        <div class="col">
+          <!-- Activity Card -->
+          <div class="profile-activity slide-in">
+            <div class="activity-header">
+              <h3 class="activity-title">Recent Activity</h3>
+            </div>
+            
+            <ul class="activity-list" id="activity-list">
+              <!-- Activity items will be added dynamically -->
+              <li class="activity-item">
+                <div class="activity-icon">📝</div>
+                <div class="activity-content">
+                  <div class="activity-action">You updated your profile</div>
+                  <div class="activity-date">Today at 10:30 AM</div>
+                </div>
+              </li>
+              
+              <!-- Empty state message (initially hidden) -->
+              <li id="no-activity" style="display: none;">
+                <p class="text-center text-muted">No recent activity to display.</p>
+              </li>
+            </ul>
+            
+            <div class="form-actions">
+              <button class="btn btn-secondary" id="export-data-btn">Export My Data</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bottom">
+        <p>&copy; 2025 Blossom v1.0 | <a href="#">Feedback</a> | <a href="#">Privacy Policy</a></p>
+        <p class="text-muted">This app is for support only and does not replace professional medical advice.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/storage.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Authentication check
+      if (!Storage.isAuthenticated()) {
+        window.location.href = 'auth.html';
+        return;
+      }
+      
+      // Get current user
+      const currentUser = Storage.getCurrentUser();
+      const username = currentUser.username;
+      
+      // Elements
+      const profileForm = document.getElementById('profile-form');
+      const profileAvatar = document.getElementById('profile-avatar');
+      const avatarInitial = document.getElementById('avatar-initial');
+      const profileName = document.getElementById('profile-name');
+      const joinDate = document.getElementById('join-date');
+      const usernameInput = document.getElementById('username');
+      const emailInput = document.getElementById('email');
+      const displayNameInput = document.getElementById('display-name');
+      const languageSelect = document.getElementById('language');
+      const dailyReminderToggle = document.getElementById('daily-reminder');
+      const weeklySummaryToggle = document.getElementById('weekly-summary');
+      const resourceSuggestionsToggle = document.getElementById('resource-suggestions');
+      const darkModeToggle = document.getElementById('dark-mode');
+      const exportDataBtn = document.getElementById('export-data-btn');
+      const activityList = document.getElementById('activity-list');
+      const noActivity = document.getElementById('no-activity');
+      
+      // Load user data
+      loadUserData();
+      loadActivity();
+      
+      // Form submission
+      profileForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        // Validate password change if attempted
+        const currentPassword = document.getElementById('current-password').value;
+        const newPassword = document.getElementById('new-password').value;
+        const confirmPassword = document.getElementById('confirm-password').value;
+        
+        if (currentPassword || newPassword || confirmPassword) {
+          // Check if current password is correct
+          const user = Storage.getUserByUsername(username);
+          
+          if (!user || user.password !== currentPassword) {
+            alert('Current password is incorrect.');
+            return;
+          }
+          
+          // Check if new password is valid
+          if (newPassword.length < 6) {
+            alert('New password should be at least 6 characters.');
+            return;
+          }
+          
+          // Check if passwords match
+          if (newPassword !== confirmPassword) {
+            alert('New passwords do not match.');
+            return;
+          }
+        }
+        
+        // Get form values
+        const email = emailInput.value.trim();
+        const displayName = displayNameInput.value.trim();
+        const language = languageSelect.value;
+        const securityQuestion = document.getElementById('security-question').value;
+        const securityAnswer = document.getElementById('security-answer').value.trim();
+        
+        // Create updated profile
+        const updatedProfile = {
+          email,
+          displayName,
+          language,
+          preferences: {
+            dailyReminder: dailyReminderToggle.checked,
+            weeklySummary: weeklySummaryToggle.checked,
+            resourceSuggestions: resourceSuggestionsToggle.checked,
+            darkMode: darkModeToggle.checked
+          },
+          security: {
+            question: securityQuestion,
+            answer: securityAnswer
+          }
+        };
+        
+        // Update user
+        const updates = {
+          profile: updatedProfile
+        };
+        
+        // Add password update if provided
+        if (newPassword) {
+          updates.password = newPassword;
+        }
+        
+        // Save changes
+        const success = Storage.updateUser(username, updates);
+        
+        if (success) {
+          // Log activity
+          logActivity('Updated profile settings');
+          
+          // Reload activity
+          loadActivity();
+          
+          // Show success message
+          alert('Profile updated successfully!');
+          
+          // Clear password fields
+          document.getElementById('current-password').value = '';
+          document.getElementById('new-password').value = '';
+          document.getElementById('confirm-password').value = '';
+        } else {
+          alert('Error updating profile. Please try again.');
+        }
+      });
+      
+      // Export data
+      exportDataBtn.addEventListener('click', () => {
+        exportUserData();
+      });
+      
+      /**
+       * Load user data
+       */
+      function loadUserData() {
+        const user = Storage.getUserByUsername(username);
+        
+        if (user) {
+          // Set username
+          usernameInput.value = user.username;
+          
+          // Set profile info
+          profileName.textContent = user.profile?.displayName || user.username;
+          
+          // Set avatar initial
+          avatarInitial.textContent = (user.profile?.displayName || user.username).charAt(0).toUpperCase();
+          
+          // Set join date
+          if (user.created) {
+            const createDate = new Date(user.created);
+            joinDate.textContent = createDate.toLocaleDateString('en-US', {
+              month: 'long',
+              day: 'numeric',
+              year: 'numeric'
+            });
+          }
+          
+          // Set email
+          emailInput.value = user.profile?.email || '';
+          
+          // Set display name
+          displayNameInput.value = user.profile?.displayName || '';
+          
+          // Set language
+          languageSelect.value = user.profile?.language || 'en';
+          
+          // Set preferences
+          dailyReminderToggle.checked = user.profile?.preferences?.dailyReminder !== false;
+          weeklySummaryToggle.checked = !!user.profile?.preferences?.weeklySummary;
+          resourceSuggestionsToggle.checked = user.profile?.preferences?.resourceSuggestions !== false;
+          darkModeToggle.checked = !!user.profile?.preferences?.darkMode;
+          
+          // Set security question
+          if (user.profile?.security?.question) {
+            document.getElementById('security-question').value = user.profile.security.question;
+          }
+          
+          // Set security answer
+          if (user.profile?.security?.answer) {
+            document.getElementById('security-answer').value = user.profile.security.answer;
+          }
+        }
+      }
+      
+      /**
+       * Load activity
+       */
+      function loadActivity() {
+        // Clear activity list except for no-activity message
+        const items = activityList.querySelectorAll('.activity-item');
+        items.forEach(item => {
+          activityList.removeChild(item);
+        });
+        
+        // Get user
+        const user = Storage.getUserByUsername(username);
+        
+        if (user && user.activity && user.activity.length > 0) {
+          // Sort activity by date (newest first)
+          const sortedActivity = [...user.activity].sort((a, b) => 
+            new Date(b.timestamp) - new Date(a.timestamp)
+          );
+          
+          // Show up to 5 most recent activities
+          const recentActivity = sortedActivity.slice(0, 5);
+          
+          // Hide no activity message
+          noActivity.style.display = 'none';
+          
+          // Add activity items
+          recentActivity.forEach(activity => {
+            // Create activity item
+            const activityItem = document.createElement('li');
+            activityItem.className = 'activity-item';
+            
+            // Determine icon based on action
+            let icon = '📝';
+            if (activity.action.includes('mood')) {
+              icon = '😊';
+            } else if (activity.action.includes('log') || activity.action.includes('journal')) {
+              icon = '📓';
+            } else if (activity.action.includes('chat')) {
+              icon = '🤖';
+            }
+            
+            // Format date
+            const activityDate = new Date(activity.timestamp);
+            const today = new Date();
+            const yesterday = new Date(today);
+            yesterday.setDate(today.getDate() - 1);
+            
+            let dateDisplay;
+            if (activityDate.toDateString() === today.toDateString()) {
+              dateDisplay = `Today at ${activityDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+            } else if (activityDate.toDateString() === yesterday.toDateString()) {
+              dateDisplay = `Yesterday at ${activityDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+            } else {
+              dateDisplay = activityDate.toLocaleDateString('en-US', {
+                month: 'short',
+                day: 'numeric',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+              });
+            }
+            
+            // Create activity item HTML
+            activityItem.innerHTML = `
+              <div class="activity-icon">${icon}</div>
+              <div class="activity-content">
+                <div class="activity-action">You ${activity.action}</div>
+                <div class="activity-date">${dateDisplay}</div>
+              </div>
+            `;
+            
+            // Add to activity list before no-activity message
+            activityList.insertBefore(activityItem, noActivity);
+          });
+        } else {
+          // Show no activity message
+          noActivity.style.display = 'block';
+        }
+      }
+      
+      /**
+       * Log an activity
+       * @param {string} action - Action description
+       */
+      function logActivity(action) {
+        // Get user
+        const user = Storage.getUserByUsername(username);
+        
+        if (user) {
+          // Create activity object
+          const activity = {
+            action,
+            timestamp: new Date().toISOString()
+          };
+          
+          // Initialize activity array if needed
+          if (!user.activity) {
+            user.activity = [];
+          }
+          
+          // Add activity
+          user.activity.push(activity);
+          
+          // Get users array
+          const users = Storage.getUsers();
+          
+          // Update user in array
+          const userIndex = users.findIndex(u => u.username === username);
+          if (userIndex !== -1) {
+            users[userIndex] = user;
+            
+            // Save updated users array
+            Storage.setUsers(users);
+          }
+        }
+      }
+      
+      /**
+       * Export user data
+       */
+      function exportUserData() {
+        // Get user data
+        const userData = {
+          profile: Storage.getUserByUsername(username),
+          questionnaire: Storage.getQuestionnaireResponses(username),
+          chatHistory: Storage.getChatHistory(username),
+          moodData: Storage.getMoodData(username),
+          dailyLogs: Storage.getDailyLogs(username)
+        };
+        
+        // Convert to JSON
+        const jsonData = JSON.stringify(userData, null, 2);
+        
+        // Create blob
+        const blob = new Blob([jsonData], { type: 'application/json' });
+        
+        // Create download link
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `blossom_data_${username}_${new Date().toISOString().split('T')[0]}.json`;
+        
+        // Trigger download
+        document.body.appendChild(link);
+        link.click();
+        
+        // Clean up
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+        
+        // Log activity
+        logActivity('exported your data');
+      }
+    });
+  </script>
+</body>
+</html>
