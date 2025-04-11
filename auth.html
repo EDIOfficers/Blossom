@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login / Register - Blossom</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lato:wght@300;400;700&display=swap">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* Auth page specific styles */
+    body {
+      background: linear-gradient(to bottom, var(--primary-light), var(--white));
+    }
+    
+    .auth-container {
+      min-height: calc(100vh - 200px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: var(--space-xxl) 0;
+    }
+    
+    .auth-card {
+      background-color: var(--white);
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--shadow-lg);
+      width: 100%;
+      max-width: 450px;
+      overflow: hidden;
+    }
+    
+    .auth-header {
+      background-color: var(--primary-medium);
+      padding: var(--space-xl);
+      text-align: center;
+    }
+    
+    .auth-logo {
+      width: 60px;
+      height: 60px;
+      margin: 0 auto var(--space-md);
+    }
+    
+    .auth-tabs {
+      display: flex;
+      border-bottom: 1px solid var(--primary-light);
+    }
+    
+    .auth-tab {
+      flex: 1;
+      text-align: center;
+      padding: var(--space-md);
+      cursor: pointer;
+      font-weight: 500;
+      color: var(--text-medium);
+      transition: all var(--transition-fast);
+    }
+    
+    .auth-tab.active {
+      color: var(--accent);
+      border-bottom: 2px solid var(--accent);
+    }
+    
+    .auth-body {
+      padding: var(--space-xl);
+    }
+    
+    .auth-form {
+      display: none;
+    }
+    
+    .auth-form.active {
+      display: block;
+      animation: fadeIn var(--transition-medium) forwards;
+    }
+    
+    .forgot-password {
+      text-align: right;
+      margin-top: var(--space-sm);
+      font-size: var(--font-size-sm);
+    }
+    
+    .form-actions {
+      margin-top: var(--space-xl);
+    }
+    
+    .auth-footer {
+      text-align: center;
+      margin-top: var(--space-lg);
+      font-size: var(--font-size-sm);
+      color: var(--text-medium);
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="container">
+      <div class="header-content">
+        <div class="logo">
+          <svg width="40" height="40" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="45" fill="#f9dfe7" />
+            <path d="M50,30 Q60,20 50,10 Q40,20 50,30 Z" fill="#c9a4b4" />
+            <path d="M70,50 Q80,40 90,50 Q80,60 70,50 Z" fill="#c9a4b4" />
+            <path d="M50,70 Q60,80 50,90 Q40,80 50,70 Z" fill="#c9a4b4" />
+            <path d="M30,50 Q20,40 10,50 Q20,60 30,50 Z" fill="#c9a4b4" />
+            <circle cx="50" cy="50" r="15" fill="#e9dee8" />
+          </svg>
+          <span class="logo-text">Blossom</span>
+        </div>
+        <nav class="nav">
+          <a href="index.html" class="nav-link">Home</a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <!-- Auth Container -->
+  <section class="auth-container">
+    <div class="auth-card fade-in">
+      <div class="auth-header">
+        <svg class="auth-logo" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="50" cy="50" r="45" fill="#f9dfe7" />
+          <path d="M50,30 Q60,20 50,10 Q40,20 50,30 Z" fill="#c9a4b4" />
+          <path d="M70,50 Q80,40 90,50 Q80,60 70,50 Z" fill="#c9a4b4" />
+          <path d="M50,70 Q60,80 50,90 Q40,80 50,70 Z" fill="#c9a4b4" />
+          <path d="M30,50 Q20,40 10,50 Q20,60 30,50 Z" fill="#c9a4b4" />
+          <circle cx="50" cy="50" r="15" fill="#e9dee8" />
+        </svg>
+        <h2 class="auth-title">Welcome to Blossom</h2>
+        <p class="auth-subtitle">A secure space for healing and support</p>
+      </div>
+      
+      <div class="auth-tabs">
+        <div class="auth-tab" id="login-tab">Login</div>
+        <div class="auth-tab" id="register-tab">Register</div>
+      </div>
+      
+      <div class="auth-body">
+        <!-- Login Form -->
+        <form class="auth-form" id="login-form">
+          <div class="form-group">
+            <label for="login-username" class="form-label">Username</label>
+            <input type="text" id="login-username" class="form-control" placeholder="Enter your username" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="login-password" class="form-label">Password</label>
+            <input type="password" id="login-password" class="form-control" placeholder="Enter your password" required>
+            <div class="forgot-password">
+              <a href="#">Forgot password?</a>
+            </div>
+          </div>
+          
+          <div id="login-error" class="form-error" style="display: none;"></div>
+          
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary btn-block">Login</button>
+          </div>
+        </form>
+        
+        <!-- Register Form -->
+        <form class="auth-form" id="register-form">
+          <div class="form-group">
+            <label for="register-username" class="form-label">Username</label>
+            <input type="text" id="register-username" class="form-control" placeholder="Create a username" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="register-email" class="form-label">Email</label>
+            <input type="email" id="register-email" class="form-control" placeholder="Enter your email" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="register-password" class="form-label">Password</label>
+            <input type="password" id="register-password" class="form-control" placeholder="Create a password" required>
+            <div class="form-hint">Password should be at least 6 characters</div>
+          </div>
+          
+          <div class="form-group">
+            <label for="register-confirm-password" class="form-label">Confirm Password</label>
+            <input type="password" id="register-confirm-password" class="form-control" placeholder="Confirm your password" required>
+          </div>
+          
+          <div id="register-error" class="form-error" style="display: none;"></div>
+          
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary btn-block">Create Account</button>
+          </div>
+        </form>
+      </div>
+      
+      <div class="auth-footer">
+        <p>By creating an account, you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bottom">
+        <p>&copy; 2025 Blossom. All rights reserved. This app is for support only and does not replace professional medical advice.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/storage.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Initialize storage
+      if (typeof Storage !== 'undefined' && Storage.init) {
+        Storage.init();
+        console.log('Storage initialized');
+      } else {
+        console.error('Storage initialization failed');
+      }
+
+      // Tab switching logic
+      const loginTab = document.getElementById('login-tab');
+      const registerTab = document.getElementById('register-tab');
+      const loginForm = document.getElementById('login-form');
+      const registerForm = document.getElementById('register-form');
+      
+      // Check URL parameters for pre-selected tab
+      const urlParams = new URLSearchParams(window.location.search);
+      const mode = urlParams.get('mode');
+      
+      if (mode === 'register') {
+        setActiveTab('register');
+      } else {
+        setActiveTab('login');
+      }
+      
+      // Set active tab based on selection
+      function setActiveTab(tab) {
+        if (tab === 'register') {
+          registerTab.classList.add('active');
+          registerForm.classList.add('active');
+          loginTab.classList.remove('active');
+          loginForm.classList.remove('active');
+        } else {
+          loginTab.classList.add('active');
+          loginForm.classList.add('active');
+          registerTab.classList.remove('active');
+          registerForm.classList.remove('active');
+        }
+      }
+      
+      // Tab click events
+      loginTab.addEventListener('click', () => setActiveTab('login'));
+      registerTab.addEventListener('click', () => setActiveTab('register'));
+      
+      // Login form submission
+      loginForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        const username = document.getElementById('login-username').value.trim();
+        const password = document.getElementById('login-password').value;
+        const errorElement = document.getElementById('login-error');
+        
+        console.log(`Attempting login with: ${username}`);
+        
+        // Validate inputs
+        if (!username || !password) {
+          errorElement.textContent = 'Please enter both username and password';
+          errorElement.style.display = 'block';
+          return;
+        }
+        
+        // Check if user exists
+        const user = Storage.getUserByUsername(username);
+        console.log('User found:', user);
+        
+        if (!user || user.password !== password) {
+          errorElement.textContent = 'Invalid username or password';
+          errorElement.style.display = 'block';
+          return;
+        }
+        
+        // Login successful
+        Storage.setCurrentUser(user);
+        console.log('Login successful');
+        
+        // Redirect based on questionnaire completion
+        if (Storage.hasCompletedQuestionnaire(username)) {
+          window.location.href = 'home.html';
+        } else {
+          window.location.href = 'questionnaire.html';
+        }
+      });
+      
+      // Register form submission
+      registerForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        const username = document.getElementById('register-username').value.trim();
+        const email = document.getElementById('register-email').value.trim();
+        const password = document.getElementById('register-password').value;
+        const confirmPassword = document.getElementById('register-confirm-password').value;
+        const errorElement = document.getElementById('register-error');
+        
+        // Validate inputs
+        if (!username || !email || !password) {
+          errorElement.textContent = 'Please fill in all fields';
+          errorElement.style.display = 'block';
+          return;
+        }
+        
+        if (password.length < 6) {
+          errorElement.textContent = 'Password should be at least 6 characters';
+          errorElement.style.display = 'block';
+          return;
+        }
+        
+        if (password !== confirmPassword) {
+          errorElement.textContent = 'Passwords do not match';
+          errorElement.style.display = 'block';
+          return;
+        }
+        
+        // Check if username already exists
+        if (Storage.getUserByUsername(username)) {
+          errorElement.textContent = 'Username already exists';
+          errorElement.style.display = 'block';
+          return;
+        }
+        
+        // Create new user
+        const newUser = {
+          username,
+          password,
+          isAdmin: false,
+          profile: {
+            email
+          }
+        };
+        
+        const success = Storage.addUser(newUser);
+        
+        if (success) {
+          // Registration successful
+          Storage.setCurrentUser(newUser);
+          window.location.href = 'questionnaire.html';
+        } else {
+          errorElement.textContent = 'Error creating account';
+          errorElement.style.display = 'block';
+        }
+      });
+      
+      // Check if user is already logged in
+      if (Storage.isAuthenticated()) {
+        const currentUser = Storage.getCurrentUser();
+        
+        if (Storage.hasCompletedQuestionnaire(currentUser.username)) {
+          window.location.href = 'home.html';
+        } else {
+          window.location.href = 'questionnaire.html';
+        }
+      }
+    });
+  </script>
+</body>
+</html>

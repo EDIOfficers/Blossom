@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blossom - Miscarriage Support</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lato:wght@300;400;700&display=swap">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* Landing page specific styles */
+    body {
+      background: linear-gradient(to bottom, var(--primary-light), var(--white));
+    }
+    
+    .hero {
+      min-height: calc(100vh - 200px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: var(--space-xxl) 0;
+    }
+    
+    .hero-content {
+      max-width: 600px;
+      text-align: center;
+    }
+    
+    .hero-title {
+      font-size: 2.5rem;
+      margin-bottom: var(--space-lg);
+      color: var(--text-dark);
+    }
+    
+    .hero-subtitle {
+      font-size: var(--font-size-lg);
+      color: var(--text-medium);
+      margin-bottom: var(--space-xl);
+    }
+    
+    .hero-illustration {
+      max-width: 300px;
+      margin: 0 auto var(--space-xl);
+      display: block;
+    }
+    
+    .hero-buttons {
+      display: flex;
+      gap: var(--space-md);
+      justify-content: center;
+    }
+    
+    @media (max-width: 768px) {
+      .hero-buttons {
+        flex-direction: column;
+      }
+    }
+    
+    /* Flower animation */
+    .flower {
+      width: 80px;
+      height: 80px;
+      position: absolute;
+      opacity: 0.6;
+    }
+    
+    .flower-1 {
+      top: 100px;
+      left: 10%;
+      animation: float 20s ease-in-out infinite;
+    }
+    
+    .flower-2 {
+      top: 200px;
+      right: 15%;
+      animation: float 15s ease-in-out infinite;
+    }
+    
+    .flower-3 {
+      bottom: 150px;
+      left: 20%;
+      animation: float 18s ease-in-out infinite;
+    }
+    
+    .flower-4 {
+      bottom: 100px;
+      right: 10%;
+      animation: float 22s ease-in-out infinite;
+    }
+    
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0) rotate(0deg);
+      }
+      50% {
+        transform: translateY(-20px) rotate(5deg);
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Floating flowers decoration -->
+  <svg class="flower flower-1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <path d="M50,30 Q60,20 50,10 Q40,20 50,30 Z" fill="#ffcad4" />
+    <path d="M70,50 Q80,40 90,50 Q80,60 70,50 Z" fill="#f4acb7" />
+    <path d="M50,70 Q60,80 50,90 Q40,80 50,70 Z" fill="#ffcad4" />
+    <path d="M30,50 Q20,40 10,50 Q20,60 30,50 Z" fill="#f4acb7" />
+    <circle cx="50" cy="50" r="10" fill="#f9dfe7" />
+  </svg>
+  
+  <svg class="flower flower-2" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <path d="M50,30 Q60,20 50,10 Q40,20 50,30 Z" fill="#f4acb7" />
+    <path d="M70,50 Q80,40 90,50 Q80,60 70,50 Z" fill="#ffcad4" />
+    <path d="M50,70 Q60,80 50,90 Q40,80 50,70 Z" fill="#f4acb7" />
+    <path d="M30,50 Q20,40 10,50 Q20,60 30,50 Z" fill="#ffcad4" />
+    <circle cx="50" cy="50" r="10" fill="#f9dfe7" />
+  </svg>
+  
+  <svg class="flower flower-3" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <path d="M50,30 Q60,20 50,10 Q40,20 50,30 Z" fill="#ffcad4" />
+    <path d="M70,50 Q80,40 90,50 Q80,60 70,50 Z" fill="#f4acb7" />
+    <path d="M50,70 Q60,80 50,90 Q40,80 50,70 Z" fill="#ffcad4" />
+    <path d="M30,50 Q20,40 10,50 Q20,60 30,50 Z" fill="#f4acb7" />
+    <circle cx="50" cy="50" r="10" fill="#f9dfe7" />
+  </svg>
+  
+  <svg class="flower flower-4" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <path d="M50,30 Q60,20 50,10 Q40,20 50,30 Z" fill="#f4acb7" />
+    <path d="M70,50 Q80,40 90,50 Q80,60 70,50 Z" fill="#ffcad4" />
+    <path d="M50,70 Q60,80 50,90 Q40,80 50,70 Z" fill="#f4acb7" />
+    <path d="M30,50 Q20,40 10,50 Q20,60 30,50 Z" fill="#ffcad4" />
+    <circle cx="50" cy="50" r="10" fill="#f9dfe7" />
+  </svg>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="container">
+      <div class="header-content">
+        <div class="logo">
+          <svg width="40" height="40" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="45" fill="#f9dfe7" />
+            <path d="M50,30 Q60,20 50,10 Q40,20 50,30 Z" fill="#c9a4b4" />
+            <path d="M70,50 Q80,40 90,50 Q80,60 70,50 Z" fill="#c9a4b4" />
+            <path d="M50,70 Q60,80 50,90 Q40,80 50,70 Z" fill="#c9a4b4" />
+            <path d="M30,50 Q20,40 10,50 Q20,60 30,50 Z" fill="#c9a4b4" />
+            <circle cx="50" cy="50" r="15" fill="#e9dee8" />
+          </svg>
+          <span class="logo-text">Blossom</span>
+        </div>
+        
+        <div id="admin-links" style="display: none;">
+          <a href="init.html" class="nav-link">System Init</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-content fade-in">
+        <svg class="hero-illustration" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="100" cy="100" r="80" fill="#f9dfe7" />
+          <path d="M100,60 Q120,40 100,20 Q80,40 100,60 Z" fill="#c9a4b4" />
+          <path d="M140,100 Q160,80 180,100 Q160,120 140,100 Z" fill="#c9a4b4" />
+          <path d="M100,140 Q120,160 100,180 Q80,160 100,140 Z" fill="#c9a4b4" />
+          <path d="M60,100 Q40,80 20,100 Q40,120 60,100 Z" fill="#c9a4b4" />
+          <circle cx="100" cy="100" r="30" fill="#e9dee8" />
+        </svg>
+        <h1 class="hero-title">A gentle space for healing and support</h1>
+        <p class="hero-subtitle">Blossom provides a safe, caring environment for those navigating the journey after miscarriage</p>
+        <div class="hero-buttons slide-in">
+          <a href="auth.html?mode=register" class="btn btn-primary">Register</a>
+          <a href="auth.html?mode=login" class="btn btn-secondary">Login</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h3 class="footer-title">About Blossom</h3>
+          <p>A supportive companion for your healing journey after miscarriage.</p>
+        </div>
+        <div class="footer-section">
+          <h3 class="footer-title">Quick Links</h3>
+          <ul class="footer-links">
+            <li class="footer-link"><a href="#">About</a></li>
+            <li class="footer-link"><a href="#">Contact</a></li>
+            <li class="footer-link"><a href="#">Support</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h3 class="footer-title">Resources</h3>
+          <ul class="footer-links">
+            <li class="footer-link"><a href="#">NHS Support</a></li>
+            <li class="footer-link"><a href="#">Miscarriage Association</a></li>
+            <li class="footer-link"><a href="#">Helplines</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 Blossom. All rights reserved. This app is for support only and does not replace professional medical advice.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/storage.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      console.log('Landing page loaded');
+      
+      // Initialize Storage if available
+      if (typeof Storage !== 'undefined' && Storage.init) {
+        try {
+          Storage.init();
+          console.log('Storage initialized');
+        } catch (error) {
+          console.error('Error initializing storage:', error);
+        }
+      } else {
+        console.error('Storage not available');
+      }
+      
+      // Check if user is already logged in
+      if (Storage && Storage.isAuthenticated) {
+        try {
+          // If user is already logged in, redirect to home
+          if (Storage.isAuthenticated()) {
+            const currentUser = Storage.getCurrentUser();
+            console.log('User is authenticated:', currentUser);
+            
+            // Show admin links if admin
+            if (currentUser.isAdmin) {
+              document.getElementById('admin-links').style.display = 'block';
+            }
+            
+            // If user hasn't completed questionnaire, redirect there
+            if (!Storage.hasCompletedQuestionnaire(currentUser.username)) {
+              console.log('Redirecting to questionnaire');
+              window.location.href = 'questionnaire.html';
+            } else {
+              // Otherwise redirect to home dashboard
+              console.log('Redirecting to home');
+              window.location.href = 'home.html';
+            }
+          } else {
+            console.log('User is not authenticated');
+          }
+        } catch (error) {
+          console.error('Error checking authentication:', error);
+        }
+      }
+    });
+  </script>
+</body>
+</html>

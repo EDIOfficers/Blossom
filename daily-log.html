@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Daily Log - Blossom</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lato:wght@300;400;700&display=swap">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* Daily Log specific styles */
+    body {
+      background-color: var(--primary-light);
+    }
+    
+    .daily-log-container {
+      padding: var(--space-xxl) 0;
+    }
+    
+    .log-card {
+      background-color: var(--white);
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--shadow-md);
+      padding: var(--space-xl);
+      margin-bottom: var(--space-xl);
+    }
+    
+    .log-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--space-lg);
+    }
+    
+    .date-selector {
+      display: flex;
+      align-items: center;
+    }
+    
+    .date-input {
+      padding: var(--space-sm) var(--space-md);
+      border: 1px solid var(--primary-dark);
+      border-radius: var(--border-radius-md);
+      font-family: var(--font-primary);
+    }
+    
+    .log-editor {
+      margin-top: var(--space-lg);
+    }
+    
+    .editor-toolbar {
+      display: flex;
+      gap: var(--space-sm);
+      margin-bottom: var(--space-md);
+    }
+    
+    .editor-button {
+      background: none;
+      border: 1px solid var(--primary-dark);
+      border-radius: var(--border-radius-sm);
+      padding: var(--space-xs) var(--space-sm);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+    
+    .editor-button:hover {
+      background-color: var(--primary-light);
+    }
+    
+    .editor-content {
+      width: 100%;
+      min-height: 300px;
+      padding: var(--space-md);
+      border: 1px solid var(--primary-dark);
+      border-radius: var(--border-radius-md);
+      font-family: var(--font-primary);
+      resize: vertical;
+      line-height: 1.6;
+    }
+    
+    .editor-content:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+    
+    .log-actions {
+      display: flex;
+      justify-content: space-between;
+      margin-top: var(--space-lg);
+    }
+    
+    .keyword-warning {
+      background-color: var(--primary-medium);
+      border-left: 4px solid var(--accent);
+      padding: var(--space-md);
+      margin-top: var(--space-lg);
+      display: none; /* Hidden by default */
+    }
+    
+    .keyword-warning.active {
+      display: block;
+      animation: fadeIn var(--transition-medium);
+    }
+    
+    .log-list-card {
+      background-color: var(--white);
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--shadow-md);
+      overflow: hidden;
+    }
+    
+    .log-list-header {
+      background-color: var(--primary-medium);
+      padding: var(--space-md) var(--space-lg);
+      border-bottom: 1px solid var(--primary-dark);
+    }
+    
+    .log-list-title {
+      font-size: var(--font-size-lg);
+      font-weight: 600;
+    }
+    
+    .log-list-content {
+      padding: var(--space-lg);
+    }
+    
+    .log-items {
+      max-height: 400px;
+      overflow-y: auto;
+    }
+    
+    .log-item {
+      padding: var(--space-md);
+      margin-bottom: var(--space-md);
+      border-bottom: 1px solid var(--primary-light);
+      cursor: pointer;
+      transition: background-color var(--transition-fast);
+    }
+    
+    .log-item:hover {
+      background-color: var(--primary-light);
+    }
+    
+    .log-item-date {
+      font-weight: 600;
+      margin-bottom: var(--space-xs);
+    }
+    
+    .log-item-preview {
+      color: var(--text-medium);
+      font-size: var(--font-size-sm);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    
+    .no-logs {
+      text-align: center;
+      color: var(--text-medium);
+      padding: var(--space-xl);
+    }
+    
+    .mood-indicator {
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+      margin-top: var(--space-md);
+    }
+    
+    .mood-label {
+      font-weight: 500;
+    }
+    
+    .mood-options {
+      display: flex;
+      gap: var(--space-sm);
+    }
+    
+    .mood-option {
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      background-color: var(--primary-light);
+    }
+    
+    .mood-option:hover {
+      transform: scale(1.1);
+    }
+    
+    .mood-option.selected {
+      background-color: var(--accent);
+      color: var(--white);
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="container">
+      <div class="header-content">
+        <div class="logo">
+          <svg width="40" height="40" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="45" fill="#f9dfe7" />
+            <path d="M50,30 Q60,20 50,10 Q40,20 50,30 Z" fill="#c9a4b4" />
+            <path d="M70,50 Q80,40 90,50 Q80,60 70,50 Z" fill="#c9a4b4" />
+            <path d="M50,70 Q60,80 50,90 Q40,80 50,70 Z" fill="#c9a4b4" />
+            <path d="M30,50 Q20,40 10,50 Q20,60 30,50 Z" fill="#c9a4b4" />
+            <circle cx="50" cy="50" r="15" fill="#e9dee8" />
+          </svg>
+          <span class="logo-text">Blossom</span>
+        </div>
+        <nav class="nav">
+          <a href="home.html" class="nav-link">Dashboard</a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <!-- Daily Log Container -->
+  <section class="daily-log-container">
+    <div class="container">
+      <div class="row">
+        <!-- Left Column: Log Editor -->
+        <div class="col">
+          <div class="log-card fade-in">
+            <div class="log-header">
+              <h2>Daily Log</h2>
+              <div class="date-selector">
+                <input type="date" id="log-date" class="date-input">
+              </div>
+            </div>
+            
+            <div class="log-editor">
+              <div class="editor-toolbar">
+                <button class="editor-button" data-action="bold"><strong>B</strong></button>
+                <button class="editor-button" data-action="italic"><em>I</em></button>
+                <button class="editor-button" data-action="underline"><u>U</u></button>
+                <span style="flex: 1"></span>
+                <button class="editor-button" data-action="clear">Clear</button>
+              </div>
+              
+              <textarea id="log-content" class="editor-content" placeholder="Write your thoughts here..."></textarea>
+            </div>
+            
+            <div class="mood-indicator">
+              <div class="mood-label">How are you feeling today?</div>
+              <div class="mood-options">
+                <div class="mood-option" data-mood="1">😞</div>
+                <div class="mood-option" data-mood="2">😔</div>
+                <div class="mood-option" data-mood="3">😐</div>
+                <div class="mood-option" data-mood="4">🙂</div>
+                <div class="mood-option" data-mood="5">😊</div>
+              </div>
+            </div>
+            
+            <div id="keyword-warning" class="keyword-warning">
+              <p>We noticed you've mentioned feeling <strong>alone</strong> several times. Remember that you're not alone in this journey. Would you like to talk to our chatbot or explore community resources?</p>
+              <div class="action-buttons">
+                <a href="chat.html" class="btn btn-secondary">Talk to Someone</a>
+              </div>
+            </div>
+            
+            <div class="log-actions">
+              <button id="delete-log-btn" class="btn btn-secondary" style="display: none;">Delete Entry</button>
+              <button id="save-log-btn" class="btn btn-primary">Save Entry</button>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Right Column: Log List -->
+        <div class="col">
+          <div class="log-list-card slide-in">
+            <div class="log-list-header">
+              <h3 class="log-list-title">Previous Entries</h3>
+            </div>
+            
+            <div class="log-list-content">
+              <div id="log-items" class="log-items">
+                <!-- Empty state -->
+                <div id="no-logs" class="no-logs">
+                  <p>No journal entries yet. Start writing to see your entries here.</p>
+                </div>
+                
+                <!-- Log items will be added here dynamically -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bottom">
+        <p>&copy; 2025 Blossom v1.0 | <a href="#">Feedback</a> | <a href="#">Privacy Policy</a></p>
+        <p class="text-muted">This app is for support only and does not replace professional medical advice.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/storage.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Authentication check
+      if (!Storage.isAuthenticated()) {
+        window.location.href = 'auth.html';
+        return;
+      }
+      
+      // Get current user
+      const currentUser = Storage.getCurrentUser();
+      const username = currentUser.username;
+      
+      // Elements
+      const logDateInput = document.getElementById('log-date');
+      const logContentInput = document.getElementById('log-content');
+      const saveLogBtn = document.getElementById('save-log-btn');
+      const deleteLogBtn = document.getElementById('delete-log-btn');
+      const keywordWarning = document.getElementById('keyword-warning');
+      const logItems = document.getElementById('log-items');
+      const noLogs = document.getElementById('no-logs');
+      const moodOptions = document.querySelectorAll('.mood-option');
+      
+      // State
+      let currentLogId = null;
+      let selectedMood = 3; // Default to neutral
+      
+      // Initialize
+      initializeDate();
+      loadLogs();
+      
+      // Editor toolbar functionality
+      document.querySelectorAll('.editor-button').forEach(button => {
+        button.addEventListener('click', () => {
+          const action = button.dataset.action;
+          
+          if (action === 'bold') {
+            wrapSelectedText('**', '**');
+          } else if (action === 'italic') {
+            wrapSelectedText('*', '*');
+          } else if (action === 'underline') {
+            wrapSelectedText('_', '_');
+          } else if (action === 'clear') {
+            if (confirm('Are you sure you want to clear the editor? This cannot be undone.')) {
+              logContentInput.value = '';
+              currentLogId = null;
+              deleteLogBtn.style.display = 'none';
+              saveLogBtn.textContent = 'Save Entry';
+            }
+          }
+        });
+      });
+      
+      // Date change event
+      logDateInput.addEventListener('change', () => {
+        // Check if there's an entry for the selected date
+        const logs = Storage.getDailyLogs(username);
+        
+        if (logs && logs.entries.length > 0) {
+          const selectedDate = logDateInput.value;
+          const existingLog = logs.entries.find(entry => entry.date === selectedDate);
+          
+          if (existingLog) {
+            // Load existing log
+            loadLog(existingLog);
+            return;
+          }
+        }
+        
+        // No existing log found, clear the editor
+        logContentInput.value = '';
+        currentLogId = null;
+        deleteLogBtn.style.display = 'none';
+        saveLogBtn.textContent = 'Save Entry';
+        
+        // Reset mood selection
+        moodOptions.forEach(opt => opt.classList.remove('selected'));
+        const defaultMood = document.querySelector(`.mood-option[data-mood="${selectedMood}"]`);
+        if (defaultMood) defaultMood.classList.add('selected');
+      });
+      
+      // Save log
+      saveLogBtn.addEventListener('click', () => {
+        const content = logContentInput.value.trim();
+        
+        if (!content) {
+          alert('Please write something before saving.');
+          return;
+        }
+        
+        // Get selected date (or today if none selected)
+        const date = logDateInput.value || new Date().toISOString().split('T')[0];
+        
+        // Create log entry
+        const logEntry = {
+          id: currentLogId || `log_${Date.now()}`,
+          date,
+          content,
+          mood: selectedMood,
+          keywords: extractKeywords(content),
+          timestamp: new Date().toISOString()
+        };
+        
+        // Save log
+        const logId = Storage.saveLogEntry(username, logEntry);
+        
+        // Update state
+        currentLogId = logId;
+        
+        // Show delete button
+        deleteLogBtn.style.display = 'block';
+        saveLogBtn.textContent = 'Update Entry';
+        
+        // Check for keywords
+        checkKeywords(content);
+        
+        // Reload logs
+        loadLogs();
+        
+        alert('Journal entry saved successfully!');
+      });
+      
+      // Delete log
+      deleteLogBtn.addEventListener('click', () => {
+        if (!currentLogId) return;
+        
+        if (confirm('Are you sure you want to delete this entry? This cannot be undone.')) {
+          // Get logs
+          const logs = Storage.getDailyLogs(username);
+          
+          if (logs && logs.entries.length > 0) {
+            // Filter out the current log
+            const updatedEntries = logs.entries.filter(entry => entry.id !== currentLogId);
+            
+            // Save updated logs
+            localStorage.setItem(Storage.StorageKeys.DAILY_LOGS + username, JSON.stringify({
+              username,
+              entries: updatedEntries
+            }));
+            
+            // Reset state
+            currentLogId = null;
+            logContentInput.value = '';
+            deleteLogBtn.style.display = 'none';
+            saveLogBtn.textContent = 'Save Entry';
+            
+            // Reset mood selection
+            moodOptions.forEach(opt => opt.classList.remove('selected'));
+            const defaultMood = document.querySelector(`.mood-option[data-mood="${selectedMood}"]`);
+            if (defaultMood) defaultMood.classList.add('selected');
+            
+            // Hide keyword warning
+            keywordWarning.classList.remove('active');
+            
+            // Reload logs
+            loadLogs();
+            
+            alert('Journal entry deleted successfully!');
+          }
+        }
+      });
+      
+      // Mood selection
+      moodOptions.forEach(option => {
+        option.addEventListener('click', () => {
+          // Deselect all options
+          moodOptions.forEach(opt => opt.classList.remove('selected'));
+          
+          // Select clicked option
+          option.classList.add('selected');
+          selectedMood = parseInt(option.dataset.mood);
+        });
+      });
+      
+      // Set default selected mood
+      const defaultMood = document.querySelector(`.mood-option[data-mood="${selectedMood}"]`);
+      if (defaultMood) defaultMood.classList.add('selected');
+      
+      /**
+       * Initialize date input with today's date
+       */
+      function initializeDate() {
+        const today = new Date().toISOString().split('T')[0];
+        logDateInput.value = today;
+      }
+      
+      /**
+       * Load a specific log
+       * @param {Object} log - Log entry
+       */
+      function loadLog(log) {
+        currentLogId = log.id;
+        logContentInput.value = log.content;
+        deleteLogBtn.style.display = 'block';
+        saveLogBtn.textContent = 'Update Entry';
+        
+        // Set mood if available
+        if (log.mood) {
+          selectedMood = log.mood;
+          moodOptions.forEach(opt => opt.classList.remove('selected'));
+          const moodOption = document.querySelector(`.mood-option[data-mood="${log.mood}"]`);
+          if (moodOption) moodOption.classList.add('selected');
+        }
+        
+        // Check for keywords
+        checkKeywords(log.content);
+      }
+      
+      /**
+       * Load all logs
+       */
+      function loadLogs() {
+        const logs = Storage.getDailyLogs(username);
+        
+        // Clear previous logs
+        logItems.innerHTML = '';
+        
+        // Show/hide empty state
+        if (!logs || logs.entries.length === 0) {
+          logItems.appendChild(noLogs);
+          return;
+        }
+        
+        // Sort logs by date (newest first)
+        const sortedLogs = [...logs.entries].sort((a, b) => 
+          new Date(b.timestamp) - new Date(a.timestamp)
+        );
+        
+        // Create log items
+        sortedLogs.forEach(log => {
+          const logItem = document.createElement('div');
+          logItem.className = 'log-item';
+          logItem.dataset.id = log.id;
+          
+          // Format date
+          const logDate = new Date(log.date + 'T00:00:00');
+          const formattedDate = logDate.toLocaleDateString('en-US', {
+            weekday: 'short',
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric'
+          });
+          
+          // Get mood emoji if available
+          let moodEmoji = '';
+          if (log.mood) {
+            const moodEmojis = ['😞', '😔', '😐', '🙂', '😊'];
+            moodEmoji = moodEmojis[log.mood - 1];
+          }
+          
+          // Create preview text (limited to first 100 chars)
+          const previewText = log.content.substring(0, 100) + (log.content.length > 100 ? '...' : '');
+          
+          // Create log item HTML
+          logItem.innerHTML = `
+            <div class="log-item-date">${formattedDate} ${moodEmoji}</div>
+            <div class="log-item-preview">${previewText}</div>
+          `;
+          
+          // Add click event to load the log
+          logItem.addEventListener('click', () => {
+            // Set date input to log date
+            logDateInput.value = log.date;
+            
+            // Load log
+            loadLog(log);
+          });
+          
+          logItems.appendChild(logItem);
+        });
+      }
+      
+      /**
+       * Extract keywords from content
+       * @param {string} content - Log content
+       * @returns {Array} Array of keywords
+       */
+      function extractKeywords(content) {
+        const keywords = [];
+        const lowercaseContent = content.toLowerCase();
+        
+        // Common keywords to look for
+        const keywordList = [
+          'alone', 'lonely', 'sad', 'depressed', 'angry', 'frustrated',
+          'anxious', 'worried', 'scared', 'hopeful', 'happy', 'grateful',
+          'pain', 'tired', 'exhausted', 'sleep', 'nightmare', 'dream',
+          'family', 'partner', 'friend', 'support', 'help', 'doctor',
+          'hospital', 'appointment', 'future', 'hope', 'try again'
+        ];
+        
+        // Check for each keyword
+        keywordList.forEach(keyword => {
+          if (lowercaseContent.includes(keyword)) {
+            keywords.push(keyword);
+          }
+        });
+        
+        return keywords;
+      }
+      
+      /**
+       * Check for concerning keywords in content
+       * @param {string} content - Log content
+       */
+      function checkKeywords(content) {
+        const lowercaseContent = content.toLowerCase();
+        
+        // Count occurrences of "alone" or "lonely"
+        const aloneCount = (lowercaseContent.match(/\balone\b/g) || []).length;
+        const lonelyCount = (lowercaseContent.match(/\blonely\b/g) || []).length;
+        
+        // Show warning if there are multiple occurrences
+        if (aloneCount >= 2 || lonelyCount >= 2 || (aloneCount + lonelyCount >= 3)) {
+          keywordWarning.classList.add('active');
+        } else {
+          keywordWarning.classList.remove('active');
+        }
+      }
+      
+      /**
+       * Wrap selected text in editor with markers
+       * @param {string} before - Text to add before selection
+       * @param {string} after - Text to add after selection
+       */
+      function wrapSelectedText(before, after) {
+        const start = logContentInput.selectionStart;
+        const end = logContentInput.selectionEnd;
+        const selectedText = logContentInput.value.substring(start, end);
+        const beforeText = logContentInput.value.substring(0, start);
+        const afterText = logContentInput.value.substring(end);
+        
+        logContentInput.value = beforeText + before + selectedText + after + afterText;
+        
+        // Reset selection
+        logContentInput.focus();
+        logContentInput.setSelectionRange(start + before.length, end + before.length);
+      }
+    });
+  </script>
+</body>
+</html>

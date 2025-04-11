@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mood Tracker - Blossom</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lato:wght@300;400;700&display=swap">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* Mood Tracker specific styles */
+    body {
+      background-color: var(--primary-light);
+    }
+    
+    .mood-tracker-container {
+      padding: var(--space-xxl) 0;
+    }
+    
+    .tracker-card {
+      background-color: var(--white);
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--shadow-md);
+      padding: var(--space-xl);
+      margin-bottom: var(--space-xl);
+    }
+    
+    .tracker-header {
+      text-align: center;
+      margin-bottom: var(--space-lg);
+    }
+    
+    .tracker-subtitle {
+      color: var(--text-medium);
+      margin-top: var(--space-sm);
+    }
+    
+    .mood-selector {
+      display: flex;
+      justify-content: space-between;
+      margin: var(--space-xl) 0;
+      flex-wrap: wrap;
+    }
+    
+    .mood-option {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+      padding: var(--space-md);
+      border-radius: var(--border-radius-md);
+      transition: all var(--transition-fast);
+      flex: 1;
+      min-width: 70px;
+      margin: 0 var(--space-xs);
+    }
+    
+    .mood-option:hover {
+      background-color: var(--primary-light);
+    }
+    
+    .mood-option.selected {
+      background-color: var(--primary-medium);
+    }
+    
+    .mood-emoji {
+      font-size: 2.5rem;
+      margin-bottom: var(--space-sm);
+    }
+    
+    .mood-label {
+      font-size: var(--font-size-sm);
+      text-align: center;
+    }
+    
+    .notes-container {
+      margin-top: var(--space-xl);
+    }
+    
+    .notes-label {
+      font-weight: 500;
+      margin-bottom: var(--space-sm);
+    }
+    
+    .notes-input {
+      width: 100%;
+      min-height: 100px;
+      padding: var(--space-md);
+      border-radius: var(--border-radius-md);
+      border: 1px solid var(--primary-dark);
+      font-family: var(--font-primary);
+      resize: vertical;
+    }
+    
+    .notes-input:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+    
+    .tags-container {
+      margin-top: var(--space-lg);
+    }
+    
+    .tags-label {
+      font-weight: 500;
+      margin-bottom: var(--space-sm);
+    }
+    
+    .tags-options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      margin-top: var(--space-md);
+    }
+    
+    .tag {
+      padding: var(--space-xs) var(--space-md);
+      background-color: var(--primary-light);
+      border-radius: var(--border-radius-sm);
+      font-size: var(--font-size-sm);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+    
+    .tag:hover {
+      background-color: var(--primary-medium);
+    }
+    
+    .tag.selected {
+      background-color: var(--accent);
+      color: var(--white);
+    }
+    
+    .tracker-actions {
+      margin-top: var(--space-xl);
+      display: flex;
+      justify-content: center;
+    }
+    
+    .history-card {
+      background-color: var(--white);
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--shadow-md);
+      overflow: hidden;
+    }
+    
+    .history-header {
+      background-color: var(--primary-medium);
+      padding: var(--space-md) var(--space-lg);
+      border-bottom: 1px solid var(--primary-dark);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .history-title {
+      font-size: var(--font-size-lg);
+      font-weight: 600;
+    }
+    
+    .history-tabs {
+      display: flex;
+    }
+    
+    .history-tab {
+      padding: var(--space-sm) var(--space-md);
+      cursor: pointer;
+      font-weight: 500;
+      color: var(--text-medium);
+      transition: all var(--transition-fast);
+    }
+    
+    .history-tab.active {
+      color: var(--accent);
+      border-bottom: 2px solid var(--accent);
+    }
+    
+    .history-content {
+      padding: var(--space-lg);
+    }
+    
+    .no-entries {
+      text-align: center;
+      color: var(--text-medium);
+      padding: var(--space-xl);
+    }
+    
+    .mood-entries {
+      display: flex;
+      flex-wrap: wrap;
+    }
+    
+    .mood-entry {
+      padding: var(--space-md);
+      margin: var(--space-sm);
+      background-color: var(--primary-light);
+      border-radius: var(--border-radius-md);
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+      width: calc(50% - var(--space-lg));
+      box-shadow: var(--shadow-sm);
+    }
+    
+    .entry-date {
+      font-weight: 500;
+      margin-bottom: var(--space-sm);
+    }
+    
+    .entry-mood {
+      font-size: 2rem;
+      margin-bottom: var(--space-sm);
+    }
+    
+    .entry-notes {
+      font-size: var(--font-size-sm);
+      color: var(--text-medium);
+      margin-top: var(--space-sm);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      width: 100%;
+    }
+    
+    .entry-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-xs);
+      margin-top: var(--space-sm);
+    }
+    
+    .entry-tag {
+      font-size: var(--font-size-xs);
+      padding: 2px 8px;
+      background-color: var(--accent);
+      color: var(--white);
+      border-radius: var(--border-radius-sm);
+    }
+    
+    @media (max-width: 768px) {
+      .mood-entry {
+        width: 100%;
+      }
+      
+      .mood-selector {
+        justify-content: center;
+      }
+      
+      .mood-option {
+        margin-bottom: var(--space-md);
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="container">
+      <div class="header-content">
+        <div class="logo">
+          <svg width="40" height="40" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="45" fill="#f9dfe7" />
+            <path d="M50,30 Q60,20 50,10 Q40,20 50,30 Z" fill="#c9a4b4" />
+            <path d="M70,50 Q80,40 90,50 Q80,60 70,50 Z" fill="#c9a4b4" />
+            <path d="M50,70 Q60,80 50,90 Q40,80 50,70 Z" fill="#c9a4b4" />
+            <path d="M30,50 Q20,40 10,50 Q20,60 30,50 Z" fill="#c9a4b4" />
+            <circle cx="50" cy="50" r="15" fill="#e9dee8" />
+          </svg>
+          <span class="logo-text">Blossom</span>
+        </div>
+        <nav class="nav">
+          <a href="home.html" class="nav-link">Dashboard</a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mood Tracker Container -->
+  <section class="mood-tracker-container">
+    <div class="container">
+      <!-- Tracker Card -->
+      <div class="tracker-card fade-in">
+        <div class="tracker-header">
+          <h2>How are you feeling today?</h2>
+          <p class="tracker-subtitle">Tracking your mood can help you see patterns over time</p>
+        </div>
+        
+        <form id="mood-form">
+          <!-- Mood Selector -->
+          <div class="mood-selector">
+            <div class="mood-option" data-mood="1">
+              <div class="mood-emoji">😞</div>
+              <div class="mood-label">Very Low</div>
+            </div>
+            
+            <div class="mood-option" data-mood="2">
+              <div class="mood-emoji">😔</div>
+              <div class="mood-label">Low</div>
+            </div>
+            
+            <div class="mood-option" data-mood="3">
+              <div class="mood-emoji">😐</div>
+              <div class="mood-label">Neutral</div>
+            </div>
+            
+            <div class="mood-option" data-mood="4">
+              <div class="mood-emoji">🙂</div>
+              <div class="mood-label">Good</div>
+            </div>
+            
+            <div class="mood-option" data-mood="5">
+              <div class="mood-emoji">😊</div>
+              <div class="mood-label">Very Good</div>
+            </div>
+          </div>
+          
+          <!-- Notes -->
+          <div class="notes-container">
+            <div class="notes-label">Notes (optional)</div>
+            <textarea class="notes-input" id="mood-notes" placeholder="Add any thoughts or reflections about your day..."></textarea>
+          </div>
+          
+          <!-- Tags -->
+          <div class="tags-container">
+            <div class="tags-label">Tags (optional)</div>
+            <p>Select any tags that describe your day</p>
+            
+            <div class="tags-options">
+              <div class="tag" data-tag="calm">Calm</div>
+              <div class="tag" data-tag="anxious">Anxious</div>
+              <div class="tag" data-tag="hopeful">Hopeful</div>
+              <div class="tag" data-tag="frustrated">Frustrated</div>
+              <div class="tag" data-tag="tired">Tired</div>
+              <div class="tag" data-tag="energetic">Energetic</div>
+              <div class="tag" data-tag="sad">Sad</div>
+              <div class="tag" data-tag="angry">Angry</div>
+              <div class="tag" data-tag="reflective">Reflective</div>
+              <div class="tag" data-tag="lonely">Lonely</div>
+              <div class="tag" data-tag="supported">Supported</div>
+              <div class="tag" data-tag="grateful">Grateful</div>
+            </div>
+          </div>
+          
+          <!-- Actions -->
+          <div class="tracker-actions">
+            <button type="submit" class="btn btn-primary">Save Mood</button>
+          </div>
+        </form>
+      </div>
+      
+      <!-- History Card -->
+      <div class="history-card slide-in">
+        <div class="history-header">
+          <h3 class="history-title">Mood History</h3>
+          <div class="history-tabs">
+            <div class="history-tab active" data-period="week">Week</div>
+            <div class="history-tab" data-period="month">Month</div>
+            <div class="history-tab" data-period="all">All</div>
+          </div>
+        </div>
+        
+        <div class="history-content">
+          <div id="mood-entries" class="mood-entries">
+            <!-- Empty state -->
+            <div id="no-entries" class="no-entries">
+              <p>No mood entries yet. Start tracking to see your history here.</p>
+            </div>
+            
+            <!-- Entries will be added here dynamically -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bottom">
+        <p>&copy; 2025 Blossom v1.0 | <a href="#">Feedback</a> | <a href="#">Privacy Policy</a></p>
+        <p class="text-muted">This app is for support only and does not replace professional medical advice.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/storage.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Authentication check
+      if (!Storage.isAuthenticated()) {
+        window.location.href = 'auth.html';
+        return;
+      }
+      
+      // Get current user
+      const currentUser = Storage.getCurrentUser();
+      const username = currentUser.username;
+      
+      // Elements
+      const moodForm = document.getElementById('mood-form');
+      const moodOptions = document.querySelectorAll('.mood-option');
+      const tags = document.querySelectorAll('.tag');
+      const moodEntries = document.getElementById('mood-entries');
+      const noEntries = document.getElementById('no-entries');
+      const historyTabs = document.querySelectorAll('.history-tab');
+      
+      // State
+      let selectedMood = null;
+      let selectedTags = [];
+      let activePeriod = 'week';
+      
+      // Initialize
+      loadMoodEntries();
+      
+      // Select mood event listeners
+      moodOptions.forEach(option => {
+        option.addEventListener('click', () => {
+          // Deselect all options
+          moodOptions.forEach(opt => opt.classList.remove('selected'));
+          
+          // Select clicked option
+          option.classList.add('selected');
+          selectedMood = option.dataset.mood;
+        });
+      });
+      
+      // Select tag event listeners
+      tags.forEach(tag => {
+        tag.addEventListener('click', () => {
+          // Toggle selected state
+          tag.classList.toggle('selected');
+          
+          const tagValue = tag.dataset.tag;
+          
+          if (tag.classList.contains('selected')) {
+            // Add tag if not already in array
+            if (!selectedTags.includes(tagValue)) {
+              selectedTags.push(tagValue);
+            }
+          } else {
+            // Remove tag from array
+            selectedTags = selectedTags.filter(t => t !== tagValue);
+          }
+        });
+      });
+      
+      // Form submission
+      moodForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        // Validate form
+        if (!selectedMood) {
+          alert('Please select a mood before saving.');
+          return;
+        }
+        
+        // Get form values
+        const notes = document.getElementById('mood-notes').value.trim();
+        const timestamp = new Date().toISOString();
+        const date = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+        
+        // Create entry object
+        const entry = {
+          mood: parseInt(selectedMood),
+          notes,
+          tags: selectedTags,
+          date,
+          timestamp
+        };
+        
+        // Save entry
+        saveMoodEntry(entry);
+        
+        // Reset form
+        resetForm();
+        
+        // Reload entries
+        loadMoodEntries();
+        
+        // Show success message
+        alert('Mood saved successfully!');
+      });
+      
+      // History tab event listeners
+      historyTabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          // Update active tab
+          historyTabs.forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+          
+          // Update active period
+          activePeriod = tab.dataset.period;
+          
+          // Reload entries with new period
+          loadMoodEntries();
+        });
+      });
+      
+      /**
+       * Save a mood entry
+       * @param {Object} entry - Mood entry to save
+       */
+      function saveMoodEntry(entry) {
+        Storage.saveMoodEntry(username, entry);
+      }
+      
+      /**
+       * Reset the form
+       */
+      function resetForm() {
+        // Reset mood selection
+        moodOptions.forEach(opt => opt.classList.remove('selected'));
+        selectedMood = null;
+        
+        // Reset tags
+        tags.forEach(tag => tag.classList.remove('selected'));
+        selectedTags = [];
+        
+        // Reset notes
+        document.getElementById('mood-notes').value = '';
+      }
+      
+      /**
+       * Load mood entries based on selected period
+       */
+      function loadMoodEntries() {
+        const moodData = Storage.getMoodData(username);
+        
+        // Clear previous entries
+        moodEntries.innerHTML = '';
+        
+        // Show/hide empty state
+        if (!moodData || moodData.entries.length === 0) {
+          moodEntries.appendChild(noEntries);
+          return;
+        }
+        
+        // Filter entries based on selected period
+        const today = new Date();
+        const entries = moodData.entries.filter(entry => {
+          const entryDate = new Date(entry.timestamp);
+          
+          if (activePeriod === 'week') {
+            // Get entries from the last 7 days
+            const weekAgo = new Date();
+            weekAgo.setDate(today.getDate() - 7);
+            return entryDate >= weekAgo;
+          } else if (activePeriod === 'month') {
+            // Get entries from the last 30 days
+            const monthAgo = new Date();
+            monthAgo.setDate(today.getDate() - 30);
+            return entryDate >= monthAgo;
+          } else {
+            // Get all entries
+            return true;
+          }
+        });
+        
+        // Sort entries by date (newest first)
+        entries.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+        
+        // Display entries
+        if (entries.length === 0) {
+          moodEntries.appendChild(noEntries);
+          return;
+        }
+        
+        entries.forEach(entry => {
+          // Create entry element
+          const entryElement = document.createElement('div');
+          entryElement.className = 'mood-entry';
+          
+          // Format date
+          const entryDate = new Date(entry.timestamp);
+          const formattedDate = entryDate.toLocaleDateString('en-US', {
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric'
+          });
+          
+          // Get mood emoji
+          const moodEmojis = ['😞', '😔', '😐', '🙂', '😊'];
+          const moodEmoji = moodEmojis[entry.mood - 1];
+          
+          // Create entry HTML
+          entryElement.innerHTML = `
+            <div class="entry-date">${formattedDate}</div>
+            <div class="entry-mood">${moodEmoji}</div>
+            ${entry.notes ? `<div class="entry-notes">${entry.notes}</div>` : ''}
+            ${entry.tags && entry.tags.length > 0 ? `
+              <div class="entry-tags">
+                ${entry.tags.map(tag => `<div class="entry-tag">${tag}</div>`).join('')}
+              </div>
+            ` : ''}
+          `;
+          
+          moodEntries.appendChild(entryElement);
+        });
+      }
+    });
+  </script>
+</body>
+</html>
