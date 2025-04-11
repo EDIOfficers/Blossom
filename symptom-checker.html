@@ -1,0 +1,1025 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Symptom Checker - Blossom</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lato:wght@300;400;700&display=swap">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* Symptom Checker specific styles */
+    body {
+      background-color: var(--primary-light);
+    }
+    
+    .symptom-container {
+      padding: var(--space-xxl) 0;
+    }
+    
+    .symptom-card {
+      background-color: var(--white);
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--shadow-md);
+      padding: var(--space-xl);
+      margin-bottom: var(--space-xl);
+    }
+    
+    .symptom-header {
+      text-align: center;
+      margin-bottom: var(--space-lg);
+    }
+    
+    .symptom-title {
+      font-size: var(--font-size-xl);
+      margin-bottom: var(--space-sm);
+    }
+    
+    .symptom-subtitle {
+      color: var(--text-medium);
+    }
+    
+    .disclaimer {
+      background-color: var(--primary-medium);
+      border-left: 4px solid var(--accent);
+      padding: var(--space-md);
+      margin: var(--space-lg) 0;
+      font-size: var(--font-size-sm);
+    }
+    
+    .disclaimer-title {
+      font-weight: 600;
+      margin-bottom: var(--space-xs);
+    }
+    
+    .symptom-form {
+      margin-top: var(--space-xl);
+    }
+    
+    .form-section {
+      margin-bottom: var(--space-xl);
+    }
+    
+    .form-section-title {
+      font-size: var(--font-size-lg);
+      margin-bottom: var(--space-md);
+      padding-bottom: var(--space-xs);
+      border-bottom: 1px solid var(--primary-dark);
+    }
+    
+    .form-section-subtitle {
+      color: var(--text-medium);
+      margin-bottom: var(--space-md);
+    }
+    
+    .symptom-options {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: var(--space-md);
+      margin-top: var(--space-md);
+    }
+    
+    .symptom-option {
+      background-color: var(--primary-light);
+      border-radius: var(--border-radius-md);
+      padding: var(--space-md);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      display: flex;
+      align-items: flex-start;
+    }
+    
+    .symptom-option:hover {
+      background-color: var(--primary-medium);
+    }
+    
+    .symptom-option.selected {
+      background-color: var(--primary-medium);
+      border: 1px solid var(--accent);
+    }
+    
+    .symptom-checkbox {
+      margin-right: var(--space-sm);
+      margin-top: 3px;
+    }
+    
+    .symptom-label {
+      flex: 1;
+    }
+    
+    .severity-slider {
+      margin-top: var(--space-md);
+    }
+    
+    .severity-slider-label {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: var(--space-xs);
+    }
+    
+    .slider {
+      -webkit-appearance: none;
+      width: 100%;
+      height: 8px;
+      border-radius: 4px;
+      background: var(--primary-dark);
+      outline: none;
+      margin-bottom: var(--space-md);
+    }
+    
+    .slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--accent);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+    
+    .slider::-webkit-slider-thumb:hover {
+      transform: scale(1.1);
+    }
+    
+    .timeline-options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-md);
+      margin-top: var(--space-md);
+    }
+    
+    .timeline-option {
+      background-color: var(--primary-light);
+      border-radius: var(--border-radius-md);
+      padding: var(--space-sm) var(--space-md);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+    
+    .timeline-option:hover {
+      background-color: var(--primary-medium);
+    }
+    
+    .timeline-option.selected {
+      background-color: var(--primary-medium);
+      border: 1px solid var(--accent);
+    }
+    
+    .textarea-group {
+      margin-top: var(--space-md);
+    }
+    
+    .additional-notes {
+      width: 100%;
+      min-height: 100px;
+      border-radius: var(--border-radius-md);
+      border: 1px solid var(--primary-dark);
+      padding: var(--space-md);
+      font-family: var(--font-primary);
+      resize: vertical;
+    }
+    
+    .additional-notes:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+    
+    .result-card {
+      background-color: var(--white);
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--shadow-md);
+      overflow: hidden;
+    }
+    
+    .result-header {
+      background-color: var(--primary-medium);
+      padding: var(--space-md) var(--space-lg);
+      border-bottom: 1px solid var(--primary-dark);
+    }
+    
+    .result-title {
+      font-size: var(--font-size-lg);
+      font-weight: 600;
+    }
+    
+    .result-content {
+      padding: var(--space-lg);
+    }
+    
+    .result-section {
+      margin-bottom: var(--space-lg);
+    }
+    
+    .result-section-title {
+      font-size: var(--font-size-md);
+      font-weight: 600;
+      margin-bottom: var(--space-sm);
+    }
+    
+    .feedback-section {
+      border-top: 1px solid var(--primary-dark);
+      padding-top: var(--space-lg);
+      margin-top: var(--space-lg);
+    }
+    
+    .feedback-question {
+      font-weight: 500;
+      margin-bottom: var(--space-md);
+    }
+    
+    .feedback-options {
+      display: flex;
+      gap: var(--space-md);
+      margin-bottom: var(--space-md);
+    }
+    
+    .action-section {
+      display: flex;
+      justify-content: space-between;
+      margin-top: var(--space-xl);
+    }
+    
+    .symptom-history {
+      margin-top: var(--space-xl);
+    }
+    
+    .history-item {
+      background-color: var(--primary-light);
+      border-radius: var(--border-radius-md);
+      padding: var(--space-md);
+      margin-bottom: var(--space-md);
+    }
+    
+    .history-date {
+      font-weight: 500;
+      margin-bottom: var(--space-xs);
+    }
+    
+    .history-symptoms {
+      font-size: var(--font-size-sm);
+      color: var(--text-medium);
+    }
+    
+    .history-actions {
+      display: flex;
+      gap: var(--space-sm);
+      margin-top: var(--space-sm);
+    }
+    
+    .alert-level {
+      font-weight: 500;
+      padding: var(--space-sm) var(--space-md);
+      border-radius: var(--border-radius-sm);
+      display: inline-block;
+      margin-bottom: var(--space-md);
+    }
+    
+    .alert-low {
+      background-color: #e3f5e9;
+      color: #2c9e5d;
+    }
+    
+    .alert-medium {
+      background-color: #fff3cd;
+      color: #856404;
+    }
+    
+    .alert-high {
+      background-color: #f8d7da;
+      color: #721c24;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="container">
+      <div class="header-content">
+        <div class="logo">
+          <svg width="40" height="40" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="45" fill="#f9dfe7" />
+            <path d="M50,30 Q60,20 50,10 Q40,20 50,30 Z" fill="#c9a4b4" />
+            <path d="M70,50 Q80,40 90,50 Q80,60 70,50 Z" fill="#c9a4b4" />
+            <path d="M50,70 Q60,80 50,90 Q40,80 50,70 Z" fill="#c9a4b4" />
+            <path d="M30,50 Q20,40 10,50 Q20,60 30,50 Z" fill="#c9a4b4" />
+            <circle cx="50" cy="50" r="15" fill="#e9dee8" />
+          </svg>
+          <span class="logo-text">Blossom</span>
+        </div>
+        <nav class="nav">
+          <a href="home.html" class="nav-link">Dashboard</a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <!-- Symptom Checker Container -->
+  <section class="symptom-container">
+    <div class="container">
+      <div class="row">
+        <!-- Left Column -->
+        <div class="col">
+          <!-- Symptom Checker Card -->
+          <div class="symptom-card fade-in">
+            <div class="symptom-header">
+              <h2 class="symptom-title">Symptom Checker</h2>
+              <p class="symptom-subtitle">Track your physical symptoms and get guidance on when to seek medical help</p>
+            </div>
+            
+            <div class="disclaimer">
+              <div class="disclaimer-title">Important Note</div>
+              <p>This tool is designed to help you track symptoms and provide general guidance. It is not a substitute for professional medical advice. If you are experiencing severe symptoms or are concerned about your health, please contact your healthcare provider or emergency services immediately.</p>
+            </div>
+            
+            <form id="symptom-form" class="symptom-form">
+              <!-- Physical Symptoms Section -->
+              <div class="form-section">
+                <h3 class="form-section-title">Physical Symptoms</h3>
+                <p class="form-section-subtitle">Select any physical symptoms you are currently experiencing</p>
+                
+                <div class="symptom-options">
+                  <label class="symptom-option">
+                    <input type="checkbox" name="symptoms" value="cramps" class="symptom-checkbox">
+                    <span class="symptom-label">Cramps or Pain</span>
+                  </label>
+                  
+                  <label class="symptom-option">
+                    <input type="checkbox" name="symptoms" value="bleeding" class="symptom-checkbox">
+                    <span class="symptom-label">Bleeding</span>
+                  </label>
+                  
+                  <label class="symptom-option">
+                    <input type="checkbox" name="symptoms" value="fever" class="symptom-checkbox">
+                    <span class="symptom-label">Fever</span>
+                  </label>
+                  
+                  <label class="symptom-option">
+                    <input type="checkbox" name="symptoms" value="fatigue" class="symptom-checkbox">
+                    <span class="symptom-label">Fatigue</span>
+                  </label>
+                  
+                  <label class="symptom-option">
+                    <input type="checkbox" name="symptoms" value="nausea" class="symptom-checkbox">
+                    <span class="symptom-label">Nausea/Vomiting</span>
+                  </label>
+                  
+                  <label class="symptom-option">
+                    <input type="checkbox" name="symptoms" value="dizziness" class="symptom-checkbox">
+                    <span class="symptom-label">Dizziness</span>
+                  </label>
+                  
+                  <label class="symptom-option">
+                    <input type="checkbox" name="symptoms" value="headache" class="symptom-checkbox">
+                    <span class="symptom-label">Headache</span>
+                  </label>
+                  
+                  <label class="symptom-option">
+                    <input type="checkbox" name="symptoms" value="chills" class="symptom-checkbox">
+                    <span class="symptom-label">Chills</span>
+                  </label>
+                  
+                  <label class="symptom-option">
+                    <input type="checkbox" name="symptoms" value="breast_tenderness" class="symptom-checkbox">
+                    <span class="symptom-label">Breast Tenderness</span>
+                  </label>
+                  
+                  <label class="symptom-option">
+                    <input type="checkbox" name="symptoms" value="discharge" class="symptom-checkbox">
+                    <span class="symptom-label">Unusual Discharge</span>
+                  </label>
+                </div>
+              </div>
+              
+              <!-- Psychological Symptoms Section -->
+              <div class="form-section">
+                <h3 class="form-section-title">Psychological Symptoms</h3>
+                <p class="form-section-subtitle">Select any emotional symptoms you are experiencing</p>
+                
+                <div class="symptom-options">
+                  <label class="symptom-option">
+                    <input type="checkbox" name="psych_symptoms" value="sadness" class="symptom-checkbox">
+                    <span class="symptom-label">Persistent Sadness</span>
+                  </label>
+                  
+                  <label class="symptom-option">
+                    <input type="checkbox" name="psych_symptoms" value="anxiety" class="symptom-checkbox">
+                    <span class="symptom-label">Anxiety or Worry</span>
+                  </label>
+                  
+                  <label class="symptom-option">
+                    <input type="checkbox" name="psych_symptoms" value="guilt" class="symptom-checkbox">
+                    <span class="symptom-label">Guilt or Self-Blame</span>
+                  </label>
+                  
+                  <label class="symptom-option">
+                    <input type="checkbox" name="psych_symptoms" value="anger" class="symptom-checkbox">
+                    <span class="symptom-label">Anger or Irritability</span>
+                  </label>
+                  
+                  <label class="symptom-option">
+                    <input type="checkbox" name="psych_symptoms" value="numbness" class="symptom-checkbox">
+                    <span class="symptom-label">Emotional Numbness</span>
+                  </label>
+                  
+                  <label class="symptom-option">
+                    <input type="checkbox" name="psych_symptoms" value="isolation" class="symptom-checkbox">
+                    <span class="symptom-label">Feelings of Isolation</span>
+                  </label>
+                  
+                  <label class="symptom-option">
+                    <input type="checkbox" name="psych_symptoms" value="sleep" class="symptom-checkbox">
+                    <span class="symptom-label">Sleep Disturbances</span>
+                  </label>
+                  
+                  <label class="symptom-option">
+                    <input type="checkbox" name="psych_symptoms" value="focus" class="symptom-checkbox">
+                    <span class="symptom-label">Difficulty Concentrating</span>
+                  </label>
+                  
+                  <label class="symptom-option">
+                    <input type="checkbox" name="psych_symptoms" value="appetite" class="symptom-checkbox">
+                    <span class="symptom-label">Changes in Appetite</span>
+                  </label>
+                  
+                  <label class="symptom-option">
+                    <input type="checkbox" name="psych_symptoms" value="intrusive" class="symptom-checkbox">
+                    <span class="symptom-label">Intrusive Thoughts</span>
+                  </label>
+                </div>
+              </div>
+              
+              <!-- Mental Wellness Section -->
+              <div class="form-section" id="mental-section">
+                <h3 class="form-section-title">Mental Wellness</h3>
+                <p class="form-section-subtitle">How would you rate your overall mental wellbeing today?</p>
+                
+                <div class="severity-slider">
+                  <div class="severity-slider-label">
+                    <span>Struggling</span>
+                    <span>Managing</span>
+                    <span>Doing Well</span>
+                  </div>
+                  <input type="range" min="1" max="10" value="5" class="slider" id="mental-slider">
+                </div>
+              </div>
+              
+              <!-- Pain Severity Section -->
+              <div class="form-section" id="pain-section" style="display: none;">
+                <h3 class="form-section-title">Pain Severity</h3>
+                <p class="form-section-subtitle">If you're experiencing pain, please rate the severity</p>
+                
+                <div class="severity-slider">
+                  <div class="severity-slider-label">
+                    <span>Mild</span>
+                    <span>Moderate</span>
+                    <span>Severe</span>
+                  </div>
+                  <input type="range" min="1" max="10" value="5" class="slider" id="pain-slider">
+                </div>
+              </div>
+              
+              <!-- Bleeding Section -->
+              <div class="form-section" id="bleeding-section" style="display: none;">
+                <h3 class="form-section-title">Bleeding Details</h3>
+                <p class="form-section-subtitle">Please provide more information about the bleeding</p>
+                
+                <div class="severity-slider">
+                  <div class="severity-slider-label">
+                    <span>Light</span>
+                    <span>Moderate</span>
+                    <span>Heavy</span>
+                  </div>
+                  <input type="range" min="1" max="10" value="5" class="slider" id="bleeding-slider">
+                </div>
+              </div>
+              
+              <!-- Timeline Section -->
+              <div class="form-section">
+                <h3 class="form-section-title">Timeline</h3>
+                <p class="form-section-subtitle">When did you first notice these symptoms?</p>
+                
+                <div class="timeline-options">
+                  <label class="timeline-option">
+                    <input type="radio" name="timeline" value="today" checked>
+                    <span>Today</span>
+                  </label>
+                  
+                  <label class="timeline-option">
+                    <input type="radio" name="timeline" value="yesterday">
+                    <span>Yesterday</span>
+                  </label>
+                  
+                  <label class="timeline-option">
+                    <input type="radio" name="timeline" value="2-3days">
+                    <span>2-3 days ago</span>
+                  </label>
+                  
+                  <label class="timeline-option">
+                    <input type="radio" name="timeline" value="week">
+                    <span>About a week ago</span>
+                  </label>
+                  
+                  <label class="timeline-option">
+                    <input type="radio" name="timeline" value="longer">
+                    <span>Longer than a week</span>
+                  </label>
+                </div>
+              </div>
+              
+              <!-- Additional Notes -->
+              <div class="form-section">
+                <h3 class="form-section-title">Additional Notes</h3>
+                <p class="form-section-subtitle">Is there anything else you'd like to mention about your symptoms?</p>
+                
+                <div class="textarea-group">
+                  <textarea id="additional-notes" class="additional-notes" placeholder="Provide any other important details about your symptoms here..."></textarea>
+                </div>
+              </div>
+              
+              <div class="action-section">
+                <button type="button" class="btn btn-secondary" id="save-only-btn">Save Without Analysis</button>
+                <button type="submit" class="btn btn-primary">Analyze Symptoms</button>
+              </div>
+            </form>
+          </div>
+        </div>
+        
+        <!-- Right Column -->
+        <div class="col">
+          <!-- Results Card - Initially Hidden -->
+          <div class="result-card slide-in" id="result-card" style="display: none;">
+            <div class="result-header">
+              <h3 class="result-title">Symptom Analysis</h3>
+            </div>
+            
+            <div class="result-content">
+              <div class="result-section">
+                <div id="alert-level" class="alert-level alert-low">Low Concern</div>
+                <p id="result-summary">Based on the symptoms you've reported, your symptoms appear to be within the normal range for physical recovery after miscarriage.</p>
+              </div>
+              
+              <div class="result-section">
+                <h4 class="result-section-title">Recommendations</h4>
+                <ul id="recommendations-list">
+                  <li>Continue to monitor your symptoms</li>
+                  <li>Get plenty of rest and stay hydrated</li>
+                  <li>Take over-the-counter pain relief as recommended by your healthcare provider</li>
+                </ul>
+              </div>
+              
+              <div class="result-section">
+                <h4 class="result-section-title">When to Seek Medical Help</h4>
+                <ul id="medical-help-list">
+                  <li>If your pain becomes severe or unmanageable</li>
+                  <li>If you experience heavy bleeding (soaking through a pad in less than an hour)</li>
+                  <li>If you develop a fever above 38°C (100.4°F)</li>
+                  <li>If you feel very weak or faint</li>
+                </ul>
+              </div>
+              
+              <div class="feedback-section">
+                <p class="feedback-question">Was this analysis helpful?</p>
+                <div class="feedback-options">
+                  <button class="btn btn-secondary" id="feedback-yes">Yes</button>
+                  <button class="btn btn-secondary" id="feedback-no">No</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- History Card -->
+          <div class="result-card slide-in">
+            <div class="result-header">
+              <h3 class="result-title">Symptom History</h3>
+            </div>
+            
+            <div class="result-content">
+              <div id="history-content">
+                <!-- Empty state message (initially shown) -->
+                <p id="no-history" class="text-center text-muted">No symptom records yet. Start tracking your symptoms to see your history here.</p>
+                
+                <!-- History items will be added dynamically -->
+                <div id="history-items" class="symptom-history">
+                  <!-- Example history item (will be replaced by dynamic content) -->
+                  <div class="history-item" style="display: none;">
+                    <div class="history-date">April 10, 2025</div>
+                    <div class="history-symptoms">Cramps, Fatigue, Nausea</div>
+                    <div class="history-actions">
+                      <button class="btn btn-secondary btn-sm view-details-btn">View Details</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bottom">
+        <p>&copy; 2025 Blossom v1.0 | <a href="#">Feedback</a> | <a href="#">Privacy Policy</a></p>
+        <p class="text-muted">This app is for support only and does not replace professional medical advice.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/storage.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Authentication check
+      if (!Storage.isAuthenticated()) {
+        window.location.href = 'auth.html';
+        return;
+      }
+      
+      // Get current user
+      const currentUser = Storage.getCurrentUser();
+      const username = currentUser.username;
+      
+      // Elements
+      const symptomForm = document.getElementById('symptom-form');
+      const symptomCheckboxes = document.querySelectorAll('input[name="symptoms"]');
+      const psychSymptomCheckboxes = document.querySelectorAll('input[name="psych_symptoms"]');
+      const painSection = document.getElementById('pain-section');
+      const painSlider = document.getElementById('pain-slider');
+      const bleedingSection = document.getElementById('bleeding-section');
+      const bleedingSlider = document.getElementById('bleeding-slider');
+      const mentalSlider = document.getElementById('mental-slider');
+      const additionalNotes = document.getElementById('additional-notes');
+      const saveOnlyBtn = document.getElementById('save-only-btn');
+      const resultCard = document.getElementById('result-card');
+      const alertLevel = document.getElementById('alert-level');
+      const resultSummary = document.getElementById('result-summary');
+      const recommendationsList = document.getElementById('recommendations-list');
+      const medicalHelpList = document.getElementById('medical-help-list');
+      const feedbackYes = document.getElementById('feedback-yes');
+      const feedbackNo = document.getElementById('feedback-no');
+      const noHistory = document.getElementById('no-history');
+      const historyItems = document.getElementById('history-items');
+      
+      // Show pain section if cramps/pain is checked
+      document.querySelector('input[value="cramps"]').addEventListener('change', function() {
+        painSection.style.display = this.checked ? 'block' : 'none';
+      });
+      
+      // Show bleeding section if bleeding is checked
+      document.querySelector('input[value="bleeding"]').addEventListener('change', function() {
+        bleedingSection.style.display = this.checked ? 'block' : 'none';
+      });
+      
+      // Save without analysis button
+      saveOnlyBtn.addEventListener('click', () => {
+        saveSymptoms(false);
+      });
+      
+      // Symptom form submission
+      symptomForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        saveSymptoms(true);
+      });
+      
+      // Feedback buttons
+      feedbackYes.addEventListener('click', () => {
+        alert('Thank you for your feedback!');
+        feedbackYes.classList.add('btn-primary');
+        feedbackYes.classList.remove('btn-secondary');
+        feedbackNo.classList.add('btn-secondary');
+        feedbackNo.classList.remove('btn-primary');
+      });
+      
+      feedbackNo.addEventListener('click', () => {
+        alert('Thank you for your feedback. We\'ll work to improve our recommendations.');
+        feedbackNo.classList.add('btn-primary');
+        feedbackNo.classList.remove('btn-secondary');
+        feedbackYes.classList.add('btn-secondary');
+        feedbackYes.classList.remove('btn-primary');
+      });
+      
+      // Load symptom history
+      loadSymptomHistory();
+      
+      /**
+       * Save symptoms
+       * @param {boolean} analyze - Whether to analyze symptoms
+       */
+      function saveSymptoms(analyze) {
+        // Get selected physical symptoms
+        const selectedSymptoms = [];
+        symptomCheckboxes.forEach(checkbox => {
+          if (checkbox.checked) {
+            selectedSymptoms.push(checkbox.value);
+          }
+        });
+        
+        // Get selected psychological symptoms
+        const selectedPsychSymptoms = [];
+        psychSymptomCheckboxes.forEach(checkbox => {
+          if (checkbox.checked) {
+            selectedPsychSymptoms.push(checkbox.value);
+          }
+        });
+        
+        // Validate
+        if (selectedSymptoms.length === 0 && selectedPsychSymptoms.length === 0) {
+          alert('Please select at least one symptom.');
+          return;
+        }
+        
+        // Get other form values
+        const painLevel = document.querySelector('input[value="cramps"]').checked ? parseInt(painSlider.value) : 0;
+        const bleedingLevel = document.querySelector('input[value="bleeding"]').checked ? parseInt(bleedingSlider.value) : 0;
+        const mentalWellnessLevel = parseInt(mentalSlider.value);
+        const timeline = document.querySelector('input[name="timeline"]:checked').value;
+        const notes = additionalNotes.value.trim();
+        
+        // Create symptom record
+        const symptomRecord = {
+          id: 'symptom_' + Date.now(),
+          username,
+          physicalSymptoms: selectedSymptoms,
+          psychologicalSymptoms: selectedPsychSymptoms,
+          painLevel,
+          bleedingLevel,
+          mentalWellnessLevel,
+          timeline,
+          notes,
+          timestamp: new Date().toISOString(),
+          date: new Date().toISOString().split('T')[0]
+        };
+        
+        // Save to storage
+        saveSymptomRecord(symptomRecord);
+        
+        // If analyze is true, show analysis
+        if (analyze) {
+          analyzeSymptoms(symptomRecord);
+        } else {
+          alert('Symptoms saved successfully!');
+        }
+        
+        // Reload symptom history
+        loadSymptomHistory();
+      }
+      
+      /**
+       * Save symptom record to storage
+       * @param {Object} record - Symptom record
+       */
+      function saveSymptomRecord(record) {
+        // Get existing records
+        let records = JSON.parse(localStorage.getItem('symptom_records_' + username) || '[]');
+        
+        // Add new record
+        records.push(record);
+        
+        // Save to localStorage
+        localStorage.setItem('symptom_records_' + username, JSON.stringify(records));
+      }
+      
+      /**
+       * Load symptom history
+       */
+      function loadSymptomHistory() {
+        // Clear existing items
+        while (historyItems.firstChild && historyItems.firstChild !== noHistory) {
+          historyItems.removeChild(historyItems.firstChild);
+        }
+        
+        // Get symptom records
+        const records = JSON.parse(localStorage.getItem('symptom_records_' + username) || '[]');
+        
+        if (records.length === 0) {
+          // Show no history message
+          noHistory.style.display = 'block';
+          return;
+        }
+        
+        // Hide no history message
+        noHistory.style.display = 'none';
+        
+        // Sort records by date (newest first)
+        records.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+        
+        // Display up to 5 most recent records
+        const recentRecords = records.slice(0, 5);
+        
+        recentRecords.forEach(record => {
+          // Create history item
+          const historyItem = document.createElement('div');
+          historyItem.className = 'history-item';
+          historyItem.dataset.id = record.id;
+          
+          // Format date
+          const recordDate = new Date(record.timestamp);
+          const formattedDate = recordDate.toLocaleDateString('en-US', {
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric'
+          });
+          
+          // Format symptoms - handle both old and new format records
+          let physicalSymptoms = record.physicalSymptoms || record.symptoms || [];
+          let psychologicalSymptoms = record.psychologicalSymptoms || [];
+          
+          const formattedPhysical = physicalSymptoms.map(s => 
+            s.charAt(0).toUpperCase() + s.slice(1).replace('_', ' ')
+          ).join(', ');
+          
+          const formattedPsych = psychologicalSymptoms.map(s => 
+            s.charAt(0).toUpperCase() + s.slice(1).replace('_', ' ')
+          ).join(', ');
+          
+          // Create history item HTML with both physical and psychological symptoms
+          historyItem.innerHTML = `
+            <div class="history-date">${formattedDate}</div>
+            ${formattedPhysical ? `<div class="history-symptoms">Physical: ${formattedPhysical}</div>` : ''}
+            ${formattedPsych ? `<div class="history-symptoms">Emotional: ${formattedPsych}</div>` : ''}
+            <div class="history-actions">
+              <button class="btn btn-secondary btn-sm view-details-btn">View Details</button>
+            </div>
+          `;
+          
+          // Add view details button event
+          historyItem.querySelector('.view-details-btn').addEventListener('click', () => {
+            analyzeSymptoms(record);
+          });
+          
+          // Add to history items
+          historyItems.appendChild(historyItem);
+        });
+      }
+      
+      /**
+       * Analyze symptoms
+       * @param {Object} record - Symptom record
+       */
+      function analyzeSymptoms(record) {
+        // Show result card
+        resultCard.style.display = 'block';
+        
+        // Scroll to result card
+        resultCard.scrollIntoView({ behavior: 'smooth' });
+        
+        // Determine alert level
+        let alertCategory = 'low';
+        let summaryText = 'Based on the symptoms you\'ve reported, your symptoms appear to be within the normal range for physical recovery after miscarriage.';
+        let recommendationsItems = [
+          'Continue to monitor your symptoms',
+          'Get plenty of rest and stay hydrated',
+          'Take over-the-counter pain relief as recommended by your healthcare provider'
+        ];
+        let medicalHelpItems = [
+          'If your pain becomes severe or unmanageable',
+          'If you experience heavy bleeding (soaking through a pad in less than an hour)',
+          'If you develop a fever above 38°C (100.4°F)',
+          'If you feel very weak or faint'
+        ];
+        
+        // Handle both old and new format records
+        const physicalSymptoms = record.physicalSymptoms || record.symptoms || [];
+        const psychologicalSymptoms = record.psychologicalSymptoms || [];
+        const mentalWellnessLevel = record.mentalWellnessLevel || 5;
+        
+        // Check for concerning physical symptoms
+        const hasHighFever = physicalSymptoms.includes('fever') && record.painLevel >= 7;
+        const hasHeavyBleeding = physicalSymptoms.includes('bleeding') && record.bleedingLevel >= 8;
+        const hasSeverePain = physicalSymptoms.includes('cramps') && record.painLevel >= 8;
+        const hasSevereSymptoms = physicalSymptoms.filter(s => 
+          ['dizziness', 'chills', 'fever', 'nausea'].includes(s)
+        ).length >= 3;
+        
+        // Check for moderate physical concerns
+        const hasModerateBleedingPain = physicalSymptoms.includes('bleeding') && 
+                                        physicalSymptoms.includes('cramps') && 
+                                        (record.bleedingLevel >= 6 || record.painLevel >= 6);
+        const hasLongerDuration = record.timeline === 'week' || record.timeline === 'longer';
+        const hasModeratePhysicalSymptoms = physicalSymptoms.length >= 4;
+        
+        // Check for concerning psychological symptoms
+        const hasSeverePsychologicalSymptoms = psychologicalSymptoms.length >= 4 && mentalWellnessLevel <= 3;
+        const hasModerateEmotionalDistress = (psychologicalSymptoms.length >= 2 && mentalWellnessLevel <= 5);
+        const hasCriticalConcerns = psychologicalSymptoms.includes('intrusive') && mentalWellnessLevel <= 2;
+        
+        // Set alert level - considering both physical and psychological symptoms
+        if (hasHighFever || hasHeavyBleeding || hasSeverePain || hasSevereSymptoms || hasCriticalConcerns) {
+          alertCategory = 'high';
+          
+          if (hasCriticalConcerns || hasSeverePsychologicalSymptoms) {
+            summaryText = 'Based on your emotional symptoms, we recommend seeking support from a mental health professional. Significant emotional distress is common after miscarriage but support can help.';
+            recommendationsItems = [
+              'Contact your healthcare provider to discuss emotional support options',
+              'Consider reaching out to a mental health professional',
+              'Be gentle with yourself during this difficult time',
+              'Share your feelings with someone you trust'
+            ];
+            medicalHelpItems = [
+              'If you have thoughts about harming yourself',
+              'If you feel unable to cope with daily activities',
+              'If your feelings are getting worse rather than better over time',
+              'If you feel overwhelmed by intrusive or distressing thoughts'
+            ];
+          } else {
+            summaryText = 'Based on your physical symptoms, we recommend contacting your healthcare provider promptly. Some of your symptoms may require medical attention.';
+            recommendationsItems = [
+              'Contact your healthcare provider or visit an emergency room for assessment',
+              'Keep track of your symptoms, including any changes',
+              'If you feel very unwell, seek immediate medical attention',
+              'Don\'t drive yourself if you\'re feeling dizzy or unwell'
+            ];
+          }
+        } else if (hasModerateBleedingPain || hasLongerDuration || hasModeratePhysicalSymptoms || hasModerateEmotionalDistress) {
+          alertCategory = 'medium';
+          
+          // Check if primarily emotional concerns
+          if (psychologicalSymptoms.length > physicalSymptoms.length && hasModerateEmotionalDistress) {
+            summaryText = 'You appear to be experiencing some emotional distress, which is completely normal after miscarriage. Consider seeking additional support if these feelings persist.';
+            recommendationsItems = [
+              'Talk with someone you trust about how you\'re feeling',
+              'Consider joining a support group for pregnancy loss',
+              'Practice self-care activities that help you relax',
+              'Be patient with yourself as you process these emotions'
+            ];
+            medicalHelpItems.push('If your feelings begin to interfere with daily functioning');
+            medicalHelpItems.push('If you notice your mood worsening over time');
+          } else {
+            summaryText = 'Some of your symptoms may need attention. Consider contacting your healthcare provider for advice, especially if these symptoms persist or worsen.';
+            recommendationsItems = [
+              'Contact your healthcare provider to discuss your symptoms',
+              'Monitor your symptoms for any changes',
+              'Rest and avoid strenuous activities',
+              'Take over-the-counter pain relief if recommended by your provider'
+            ];
+          }
+        }
+        } else {
+          // Low concern
+          
+          // If there are psychological symptoms but they're mild
+          if (psychologicalSymptoms.length > 0) {
+            recommendationsItems.push('Consider journaling or talking to someone about your feelings');
+            recommendationsItems.push('Be gentle with yourself as you process your emotions');
+            medicalHelpItems.push('If you notice your emotional symptoms getting worse');
+          }
+        }
+        
+        // Update result card
+        alertLevel.className = `alert-level alert-${alertCategory}`;
+        alertLevel.textContent = `${alertCategory.charAt(0).toUpperCase() + alertCategory.slice(1)} Concern`;
+        resultSummary.textContent = summaryText;
+        
+        // Update recommendations list
+        recommendationsList.innerHTML = '';
+        recommendationsItems.forEach(item => {
+          const li = document.createElement('li');
+          li.textContent = item;
+          recommendationsList.appendChild(li);
+        });
+        
+        // Update medical help list
+        medicalHelpList.innerHTML = '';
+        medicalHelpItems.forEach(item => {
+          const li = document.createElement('li');
+          li.textContent = item;
+          medicalHelpList.appendChild(li);
+        });
+      }
+        } else if (hasModerateBleedingPain || hasLongerDuration || hasModerateSymptoms) {
+          alertCategory = 'medium';
+          summaryText = 'Some of your symptoms may need attention. Consider contacting your healthcare provider for advice, especially if these symptoms persist or worsen.';
+          recommendationsItems = [
+            'Contact your healthcare provider to discuss your symptoms',
+            'Monitor your symptoms for any changes',
+            'Rest and avoid strenuous activities',
+            'Take over-the-counter pain relief if recommended by your provider'
+          ];
+        }
+        
+        // Update result card
+        alertLevel.className = `alert-level alert-${alertCategory}`;
+        alertLevel.textContent = `${alertCategory.charAt(0).toUpperCase() + alertCategory.slice(1)} Concern`;
+        resultSummary.textContent = summaryText;
+        
+        // Update recommendations list
+        recommendationsList.innerHTML = '';
+        recommendationsItems.forEach(item => {
+          const li = document.createElement('li');
+          li.textContent = item;
+          recommendationsList.appendChild(li);
+        });
+        
+        // Update medical help list
+        medicalHelpList.innerHTML = '';
+        medicalHelpItems.forEach(item => {
+          const li = document.createElement('li');
+          li.textContent = item;
+          medicalHelpList.appendChild(li);
+        });
+      }
+    });
+  </script>
+</body>
+</html>

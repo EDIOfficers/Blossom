@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Assessment Tools - Blossom</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lato:wght@300;400;700&display=swap">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* Assessment Tools specific styles */
+    body {
+      background-color: var(--primary-light);
+    }
+    
+    .assessment-container {
+      padding: var(--space-xxl) 0;
+    }
+    
+    .assessment-card {
+      background-color: var(--white);
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--shadow-md);
+      padding: var(--space-xl);
+      margin-bottom: var(--space-xl);
+    }
+    
+    .assessment-header {
+      text-align: center;
+      margin-bottom: var(--space-lg);
+    }
+    
+    .assessment-title {
+      font-size: var(--font-size-xl);
+      margin-bottom: var(--space-sm);
+    }
+    
+    .assessment-subtitle {
+      color: var(--text-medium);
+    }
+    
+    .disclaimer {
+      background-color: var(--primary-medium);
+      border-left: 4px solid var(--accent);
+      padding: var(--space-md);
+      margin: var(--space-lg) 0;
+      font-size: var(--font-size-sm);
+    }
+    
+    .disclaimer-title {
+      font-weight: 600;
+      margin-bottom: var(--space-xs);
+    }
+    
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: var(--space-lg);
+      margin-top: var(--space-xl);
+    }
+    
+    .tool-card {
+      background-color: var(--white);
+      border-radius: var(--border-radius-md);
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+      transition: all var(--transition-medium);
+      cursor: pointer;
+    }
+    
+    .tool-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-lg);
+    }
+    
+    .tool-header {
+      background-color: var(--primary-medium);
+      padding: var(--space-md) var(--space-lg);
+      border-bottom: 1px solid var(--primary-dark);
+    }
+    
+    .tool-title {
+      font-size: var(--font-size-lg);
+      font-weight: 600;
+    }
+    
+    .tool-content {
+      padding: var(--space-lg);
+    }
+    
+    .tool-description {
+      margin-bottom: var(--space-md);
+      color: var(--text-medium);
+    }
+    
+    .tool-duration {
+      font-size: var(--font-size-sm);
+      color: var(--text-medium);
+      display: flex;
+      align-items: center;
+      margin-bottom: var(--space-md);
+    }
+    
+    .tool-duration svg {
+      margin-right: var(--space-xs);
+    }
+    
+    .tool-actions {
+      margin-top: var(--space-md);
+    }
+    
+    .modal-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+    
+    .modal {
+      background-color: var(--white);
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--shadow-lg);
+      max-width: 90%;
+      width: 600px;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: var(--space-lg) var(--space-lg) var(--space-md);
+      border-bottom: 1px solid var(--primary-dark);
+    }
+    
+    .modal-title {
+      font-size: var(--font-size-lg);
+      font-weight: 600;
+    }
+    
+    .modal-close {
+      cursor: pointer;
+      font-size: 1.5rem;
+      color: var(--text-medium);
+      background: none;
+      border: none;
+    }
+    
+    .modal-body {
+      padding: var(--space-lg);
+    }
+    
+    .modal-footer {
+      padding: var(--space-md) var(--space-lg);
+      border-top: 1px solid var(--primary-dark);
+      display: flex;
+      justify-content: flex-end;
+    }
+    
+    .modal-description {
+      margin-bottom: var(--space-md);
+    }
+    
+    .assessment-question {
+      margin-bottom: var(--space-xl);
+    }
+    
+    .question-text {
+      font-size: var(--font-size-md);
+      font-weight: 500;
+      margin-bottom: var(--space-md);
+    }
+    
+    .question-options {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+    }
+    
+    .question-option {
+      display: flex;
+      align-items: flex-start;
+      padding: var(--space-sm) var(--space-md);
+      border: 1px solid var(--primary-dark);
+      border-radius: var(--border-radius-md);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+    
+    .question-option:hover {
+      background-color: var(--primary-light);
+    }
+    
+    .question-option.selected {
+      background-color: var(--primary-medium);
+      border-color: var(--accent);
+    }
+    
+    .question-option input {
+      margin-right: var(--space-sm);
+      margin-top: 3px;
+    }
+    
+    .assessment-progress {
+      margin: var(--space-lg) 0;
+    }
+    
+    .progress-bar-container {
+      background-color: var(--primary-dark);
+      height: 8px;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    
+    .progress-bar {
+      height: 100%;
+      background-color: var(--accent);
+      width: 0;
+      transition: width var(--transition-medium);
+    }
+    
+    .progress-info {
+      display: flex;
+      justify-content: space-between;
+      font-size: var(--font-size-sm);
+      color: var(--text-medium);
+      margin-top: var(--space-xs);
+    }
+    
+    .assessment-actions {
+      display: flex;
+      justify-content: space-between;
+    }
+    
+    .assessment-actions button {
+      min-width: 100px;
+    }
+    
+    .results-section {
+      margin-top: var(--space-xl);
+    }
+    
+    .results-title {
+      font-size: var(--font-size-lg);
+      margin-bottom: var(--space-md);
+    }
+    
+    .results-card {
+      background-color: var(--primary-light);
+      border-radius: var(--border-radius-md);
+      padding: var(--space-lg);
+      margin-bottom: var(--space-lg);
+    }
+    
+    .score-container {
+      display: flex;
+      align-items: center;
+      margin-bottom: var(--space-md);
+    }
+    
+    .score-label {
+      font-weight: 500;
+      margin-right: var(--space-md);
+    }
+    
+    .score-value {
+      font-size: var(--font-size-xl);
+      font-weight: 600;
+      color: var(--accent);
+    }
+    
+    .score-interpretation {
+      margin-bottom: var(--space-md);
+    }
+    
+    .result-details {
+      margin-top: var(--space-md);
+    }
+    
+    .history-item {
+      background-color: var(--primary-light);
+      border-radius: var(--border-radius-md);
+      padding: var(--space-md);
+      margin-bottom: var(--space-md);
+    }
+    
+    .history-date {
+      font-weight: 500;
+      margin-bottom: var(--space-xs);
+    }
+    
+    .history-score {
+      font-size: var(--font-size-sm);
+      color: var(--text-medium);
+      display: flex;
+      gap: var(--space-sm);
+    }
+    
+    .history-actions {
+      display: flex;
+      gap: var(--space-sm);
+      margin-top: var(--space-sm);
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="container">
+      <div class="header-content">
+        <div class="logo">
+          <svg width="40" height="40" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="45" fill="#f9dfe7" />
+            <path d="M50,30 Q60,20 50,10 Q40,20 50,30 Z" fill="#c9a4b4" />
+            <path d="M70,50 Q80,40 90,50 Q80,60 70,50 Z" fill="#c9a4b4" />
+            <path d="M50,70 Q60,80 50,90 Q40,80 50,70 Z" fill="#c9a4b4" />
+            <path d="M30,50 Q20,40 10,50 Q20,60 30,50 Z" fill="#c9a4b4" />
+            <circle cx="50" cy="50" r="15" fill="#e9dee8" />
+          </svg>
+          <span class="logo-text">Blossom</span>
+        </div>
+        <nav class="nav">
+          <a href="home.html" class="nav-link">Dashboard</a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <!-- Assessment Tools Container -->
+  <section class="assessment-container">
+    <div class="container">
+      <!-- Assessment Card -->
+      <div class="assessment-card fade-in">
+        <div class="assessment-header">
+          <h2 class="assessment-title">Assessment Tools</h2>
+          <p class="assessment-subtitle">Track your emotional wellbeing with these self-assessment questionnaires</p>
+        </div>
+        
+        <div class="disclaimer">
+          <div class="disclaimer-title">Important Note</div>
+          <p>These assessments are tools to help you understand your emotional state, but they are not diagnostic instruments. If you're experiencing severe distress, please speak with a healthcare professional.</p>
+        </div>
+        
+        <!-- Tools Grid -->
+        <div class="tools-grid">
+          <!-- PHQ-9 Card -->
+          <div class="tool-card" id="phq9-card">
+            <div class="tool-header">
+              <h3 class="tool-title">PHQ-9 (Depression)</h3>
+            </div>
+            <div class="tool-content">
+              <p class="tool-description">A widely used screening tool to measure depression severity.</p>
+              <div class="tool-duration">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" />
+                  <path d="M12 6V12L16 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                </svg>
+                <span>Takes about 3-5 minutes</span>
+              </div>
+              <div class="tool-actions">
+                <button class="btn btn-primary" id="start-phq9-btn">Start Assessment</button>
+              </div>
+            </div>
+          </div>
+          
+          <!-- GAD-7 Card -->
+          <div class="tool-card" id="gad7-card">
+            <div class="tool-header">
+              <h3 class="tool-title">GAD-7 (Anxiety)</h3>
+            </div>
+            <div class="tool-content">
+              <p class="tool-description">Measures severity of generalized anxiety disorder symptoms.</p>
+              <div class="tool-duration">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" />
+                  <path d="M12 6V12L16 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                </svg>
+                <span>Takes about 2-4 minutes</span>
+              </div>
+              <div class="tool-actions">
+                <button class="btn btn-primary" id="start-gad7-btn">Start Assessment</button>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Grief Scale Card -->
+          <div class="tool-card" id="grief-card">
+            <div class="tool-header">
+              <h3 class="tool-title">Brief Grief Scale</h3>
+            </div>
+            <div class="tool-content">
+              <p class="tool-description">Helps assess grief response following pregnancy loss.</p>
+              <div class="tool-duration">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" />
+                  <path d="M12 6V12L16 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                </svg>
+                <span>Takes about 5-7 minutes</span>
+              </div>
+              <div class="tool-actions">
+                <button class="btn btn-primary" id="start-grief-btn">Start Assessment</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- History Card -->
+      <div class="assessment-card slide-in">
+        <div class="assessment-header">
+          <h2 class="assessment-title">Your Assessment History</h2>
+          <p class="assessment-subtitle">Track your progress over time</p>
+        </div>
+        
+        <div id="history-content">
+          <!-- Empty state message (initially shown) -->
+          <p id="no-history" class="text-center text-muted">No assessment records yet. Complete an assessment to see your history here.</p>
+          
+          <div id="phq9-history">
+            <h3>PHQ-9 History</h3>
+            <div id="phq9-items" class="history-items">
+              <!-- PHQ-9 history items will be added dynamically -->
+            </div>
+          </div>
+          
+          <div id="gad7-history">
+            <h3>GAD-7 History</h3>
+            <div id="gad7-items" class="history-items">
+              <!-- GAD-7 history items will be added dynamically -->
+            </div>
+          </div>
+          
+          <div id="grief-history">
+            <h3>Brief Grief Scale History</h3>
+            <div id="grief-items" class="history-items">
+              <!-- Grief Scale history items will be added dynamically -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Assessment Modal -->
+  <div class="modal-container" id="assessment-modal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 class="modal-title" id="modal-title">Assessment Tool</h3>
+        <button class="modal-close" id="modal-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p class="modal-description" id="modal-description">
+          Please answer the questions below based on how you've been feeling over the past two weeks.
+        </p>
+        
+        <div id="assessment-content">
+          <!-- Assessment questions will be added dynamically -->
+          
+          <!-- Progress bar -->
+          <div class="assessment-progress">
+            <div class="progress-bar-container">
+              <div class="progress-bar" id="progress-bar"></div>
+            </div>
+            <div class="progress-info">
+              <span id="question-number">Question 1 of 9</span>
+              <span id="completion-percentage">0% complete</span>
+            </div>
+          </div>
+          
+          <!-- Assessment actions -->
+          <div class="assessment-actions">
+            <button class="btn btn-secondary" id="prev-question-btn" style="display: none;">Previous</button>
+            <button class="btn btn-primary" id="next-question-btn">Next</button>
+          </div>
+          
+          <!-- Results section (initially hidden) -->
+          <div class="results-section" id="results-section" style="display: none;">
+            <h3 class="results-title">Your Results</h3>
+            
+            <div class="results-card">
+              <div class="score-container">
+                <div class="score-label">Your score:</div>
+                <div class="score-value" id="result-score">0</div>
+              </div>
+              
+              <div class="score-interpretation" id="result-interpretation">
+                This score suggests minimal depression symptoms.
+              </div>
+              
+              <div class="result-details" id="result-details">
+                <p>Remember that this is just a screening tool and not a diagnosis. If you have concerns about your mental health, please speak with a healthcare professional.</p>
+              </div>
+            </div>
+            
+            <div class="assessment-actions">
+              <button class="btn btn-secondary" id="save-result-btn">Save Results</button>
+              <button class="btn btn-primary" id="close-result-btn">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bottom">
+        <p>&copy; 2025 Blossom v1.0 | <a href="#">Feedback</a> | <a href="#">Privacy Policy</a></p>
+        <p class="text-muted">This app is for support only and does not replace professional medical advice.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/storage.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Authentication check
+      if (!Storage.isAuthenticated()) {
+        window.location.href = 'auth.html';
+        return;
+      }
+      
+      // Get current user
+      const currentUser = Storage.getCurrentUser();
+      const username = currentUser.username;
+      
+      // Elements
+      const assessmentModal = document.getElementById('assessment-modal');
+      const modalTitle = document.getElementById('modal-title');
+      const modalDescription = document.getElementById('modal-description');
+      const modalClose = document.getElementById('modal-close');
+      const assessmentContent = document.getElementById('assessment-content');
+      const progressBar = document.getElementById('progress-bar');
+      const questionNumber = document.getElementById('question-number');
+      const completionPercentage = document.getElementById('completion-percentage');
+      const prevQuestionBtn = document.getElementById('prev-question-btn');
+      const nextQuestionBtn = document.getElementById('next-question-btn');
+      const resultsSection = document.getElementById('results-section');
+      const resultScore = document.getElementById('result-score');
+      const resultInterpretation = document.getElementById('result-interpretation');
+      const resultDetails = document.getElementById('result-details');
+      const saveResultBtn = document.getElementById('save-result-btn');
+      const closeResultBtn = document.getElementById('close-result-btn');
+      const noHistory = document.getElementById('no-history');
+      const phq9History = document.getElementById('phq9-history');
+      const gad7History = document.getElementById('gad7-history');
+      const griefHistory = document.getElementById('grief-history');
+      const phq9Items = document.getElementById('phq9-items');
+      const gad7Items = document.getElementById('gad7-items');
+      const griefItems = document.getElementById('grief-items');
+      
+      // State
+      let currentAssessment = null;
+      let currentQuestionIndex = 0;
+      let answers = [];
+      let assessmentType = '';
+      
+      // Assessment definitions
+      const assessments = {
+        phq9: {
+          title: 'PHQ-9 Depression Scale',
+          description: 'Over the last 2 weeks, how often have you been bothered by any of the following problems?',
+          questions: [
+            'Little interest or pleasure in doing things',
+            'Feeling down, depressed, or hopeless',
+            'Trouble falling or staying asleep, or sleeping too much',
+            'Feeling tired or having little energy',
+            'Poor appetite or overeating',
+            'Feeling bad about yourself — or that you are a failure or have let yourself or your family down',
+            'Trouble concentrating on things, such as reading or watching television',
+            'Moving or speaking so slowly that other people could have noticed, or being so fidgety or restless that you have been moving around a lot more than usual',
+            'Thoughts that you would be better off dead, or of hurting yourself in some way'
+          ],
+          options: [
+            { text: 'Not at all', value: 0 },
+            { text: 'Several days', value: 1 },
+            { text: 'More than half the days', value: 2 },
+            { text: 'Nearly every day', value: 3 }
+          ],
+          interpretations: [
+            { range: [0, 4], text: 'Minimal depression', details: 'Your responses suggest minimal depression symptoms.' },
+            { range: [5, 9], text: 'Mild depression', details: 'Your responses suggest mild depression symptoms. Consider discussing these feelings with a healthcare provider if they persist.' },
+            { range: [10, 14], text: 'Moderate depression', details: 'Your responses suggest moderate depression symptoms. It would be advisable to speak with a healthcare provider about these feelings.' },
+            { range: [15, 19], text: 'Moderately severe depression', details: 'Your responses suggest moderately severe depression symptoms. We recommend consulting with a healthcare provider about these feelings.' },
+            { range: [20, 27], text: 'Severe depression', details: 'Your responses suggest severe depression symptoms. We strongly recommend speaking with a healthcare provider as soon as possible.' }
+          ]
+        },
+        gad7: {
+          title: 'GAD-7 Anxiety Scale',
+          description: 'Over the last 2 weeks, how often have you been bothered by any of the following problems?',
+          questions: [
+            'Feeling nervous, anxious, or on edge',
+            'Not being able to stop or control worrying',
+            'Worrying too much about different things',
+            'Trouble relaxing',
+            'Being so restless that it\'s hard to sit still',
+            'Becoming easily annoyed or irritable',
+            'Feeling afraid as if something awful might happen'
+          ],
+          options: [
+            { text: 'Not at all', value: 0 },
+            { text: 'Several days', value: 1 },
+            { text: 'More than half the days', value: 2 },
+            { text: 'Nearly every day', value: 3 }
+          ],
+          interpretations: [
+            { range: [0, 4], text: 'Minimal anxiety', details: 'Your responses suggest minimal anxiety symptoms.' },
+            { range: [5, 9], text: 'Mild anxiety', details: 'Your responses suggest mild anxiety symptoms. Consider discussing these feelings with a healthcare provider if they persist.' },
+            { range: [10, 14], text: 'Moderate anxiety', details: 'Your responses suggest moderate anxiety symptoms. It would be advisable to speak with a healthcare provider about these feelings.' },
+            { range: [15, 21], text: 'Severe anxiety', details: 'Your responses suggest severe anxiety symptoms. We recommend consulting with a healthcare provider about these feelings.' }
+          ]
+        },
+        grief: {
+          title: 'Brief Grief Scale',
+          description: 'For each statement, please indicate how much you have felt this way since your loss.',
+          questions: [
+            'I feel intense sadness or emotional pain related to my loss',
+            'I find myself preoccupied with thoughts or memories of the baby I lost',
+            'I have difficulty accepting the loss',
+            'I avoid reminders of the loss',
+            'I feel that life has less meaning without the baby I lost',
+            'I have difficulty trusting others since the loss',
+            'I feel bitter or angry about the loss',
+            'I feel that moving forward with my life (such as making new plans or having new interests) would be difficult',
+            'I feel emotionally numb or detached from others since the loss',
+            'I feel that a part of myself died with the loss'
+          ],
+          options: [
+            { text: 'Not at all', value: 0 },
+            { text: 'Slightly', value: 1 },
+            { text: 'Somewhat', value: 2 },
+            { text: 'Quite a bit', value: 3 },
+            { text: 'Very much', value: 4 }
+          ],
+          interpretations: [
+            { range: [0, 10], text: 'Low grief intensity', details: 'Your responses suggest a manageable level of grief. It\'s important to remember that grief is a natural response to loss and there is no "right" way to grieve.' },
+            { range: [11, 20], text: 'Moderate grief intensity', details: 'Your responses suggest moderate grief intensity. This is a common response to pregnancy loss. Consider speaking with someone you trust about your feelings.' },
+            { range: [21, 30], text: 'High grief intensity', details: 'Your responses suggest more intense grief. This is a normal response to a significant loss. Consider reaching out for additional support through counseling or support groups.' },
+            { range: [31, 40], text: 'Very high grief intensity', details: 'Your responses suggest very intense grief. While grief is a normal response to loss, when it feels overwhelming, speaking with a mental health professional can be helpful.' }
+          ]
+        }
+      };
+      
+      // Load assessment history
+      loadAssessmentHistory();
+      
+      // Tool card click handlers
+      document.getElementById('start-phq9-btn').addEventListener('click', () => {
+        startAssessment('phq9');
+      });
+      
+      document.getElementById('start-gad7-btn').addEventListener('click', () => {
+        startAssessment('gad7');
+      });
+      
+      document.getElementById('start-grief-btn').addEventListener('click', () => {
+        startAssessment('grief');
+      });
+      
+      // Modal close handler
+      modalClose.addEventListener('click', closeModal);
+      
+      // Navigation buttons
+      prevQuestionBtn.addEventListener('click', showPreviousQuestion);
+      nextQuestionBtn.addEventListener('click', handleNextButtonClick);
+      
+      // Result buttons
+      saveResultBtn.addEventListener('click', saveResult);
+      closeResultBtn.addEventListener('click', closeModal);
+      
+      /**
+       * Start an assessment
+       * @param {string} type - Assessment type
+       */
+      function startAssessment(type) {
+        assessmentType = type;
+        currentAssessment = assessments[type];
+        currentQuestionIndex = 0;
+        answers = Array(currentAssessment.questions.length).fill(null);
+        
+        // Set modal content
+        modalTitle.textContent = currentAssessment.title;
+        modalDescription.textContent = currentAssessment.description;
+        
+        // Show first question
+        showQuestion(0);
+        
+        // Hide results section
+        resultsSection.style.display = 'none';
+        
+        // Show modal
+        assessmentModal.style.display = 'flex';
+      }
+      
+      /**
+       * Show a specific question
+       * @param {number} index - Question index
+       */
+      function showQuestion(index) {
+        // Update state
+        currentQuestionIndex = index;
+        
+        // Update progress
+        const progress = ((index + 1) / currentAssessment.questions.length) * 100;
+        progressBar.style.width = `${progress}%`;
+        questionNumber.textContent = `Question ${index + 1} of ${currentAssessment.questions.length}`;
+        completionPercentage.textContent = `${Math.round(progress)}% complete`;
+        
+        // Show/hide navigation buttons
+        prevQuestionBtn.style.display = index > 0 ? 'block' : 'none';
+        nextQuestionBtn.textContent = index === currentAssessment.questions.length - 1 ? 'Submit' : 'Next';
+        
+        // Create question element
+        const questionHTML = `
+          <div class="assessment-question">
+            <div class="question-text">${index + 1}. ${currentAssessment.questions[index]}</div>
+            <div class="question-options">
+              ${currentAssessment.options.map((option, optIndex) => `
+                <label class="question-option ${answers[index] === option.value ? 'selected' : ''}">
+                  <input type="radio" name="q${index}" value="${option.value}" ${answers[index] === option.value ? 'checked' : ''}>
+                  <span>${option.text}</span>
+                </label>
+              `).join('')}
+            </div>
+          </div>
+        `;
+        
+        // Insert question before progress bar
+        const progressElement = document.querySelector('.assessment-progress');
+        const questionElement = document.createElement('div');
+        questionElement.id = 'current-question';
+        questionElement.innerHTML = questionHTML;
+        
+        // Remove existing question if any
+        const existingQuestion = document.getElementById('current-question');
+        if (existingQuestion) {
+          assessmentContent.removeChild(existingQuestion);
+        }
+        
+        // Add new question before progress bar
+        assessmentContent.insertBefore(questionElement, progressElement);
+        
+        // Add event listeners to options
+        document.querySelectorAll('.question-option').forEach(option => {
+          option.addEventListener('click', function() {
+            // Get all options and remove selected class
+            document.querySelectorAll('.question-option').forEach(opt => {
+              opt.classList.remove('selected');
+            });
+            
+            // Add selected class to clicked option
+            this.classList.add('selected');
+            
+            // Select the radio button
+            const radio = this.querySelector('input[type="radio"]');
+            radio.checked = true;
+            
+            // Save answer
+            answers[currentQuestionIndex] = parseInt(radio.value);
+          });
+        });
+      }
+      
+      /**
+       * Show the previous question
+       */
+      function showPreviousQuestion() {
+        if (currentQuestionIndex > 0) {
+          showQuestion(currentQuestionIndex - 1);
+        }
+      }
+      
+      /**
+       * Handle next button click
+       */
+      function handleNextButtonClick() {
+        // Check if an option is selected
+        if (answers[currentQuestionIndex] === null) {
+          alert('Please select an option before continuing.');
+          return;
+        }
+        
+        // If last question, show results
+        if (currentQuestionIndex === currentAssessment.questions.length - 1) {
+          showResults();
+        } else {
+          // Show next question
+          showQuestion(currentQuestionIndex + 1);
+        }
+      }
+      
+      /**
+       * Show assessment results
+       */
+      function showResults() {
+        // Calculate score
+        const score = answers.reduce((sum, value) => sum + value, 0);
+        
+        // Find interpretation
+        const interpretation = currentAssessment.interpretations.find(
+          interp => score >= interp.range[0] && score <= interp.range[1]
+        );
+        
+        // Update results section
+        resultScore.textContent = score;
+        resultInterpretation.textContent = interpretation.text;
+        resultDetails.innerHTML = `
+          <p>${interpretation.details}</p>
+          <p>Remember that this is just a screening tool and not a diagnosis. If you have concerns about your mental health, please speak with a healthcare professional.</p>
+        `;
+        
+        // Hide question and navigation
+        document.getElementById('current-question').style.display = 'none';
+        document.querySelector('.assessment-progress').style.display = 'none';
+        document.querySelector('.assessment-actions').style.display = 'none';
+        
+        // Show results section
+        resultsSection.style.display = 'block';
+      }
+      
+      /**
+       * Save assessment result
+       */
+      function saveResult() {
+        // Calculate score
+        const score = answers.reduce((sum, value) => sum + value, 0);
+        
+        // Find interpretation
+        const interpretation = currentAssessment.interpretations.find(
+          interp => score >= interp.range[0] && score <= interp.range[1]
+        );
+        
+        // Create result object
+        const result = {
+          id: `${assessmentType}_${Date.now()}`,
+          type: assessmentType,
+          title: currentAssessment.title,
+          score,
+          interpretation: interpretation.text,
+          answers,
+          timestamp: new Date().toISOString(),
+          date: new Date().toISOString().split('T')[0]
+        };
+        
+        // Save to storage
+        saveAssessmentResult(result);
+        
+        // Reload history
+        loadAssessmentHistory();
+        
+        // Close modal
+        closeModal();
+        
+        // Show success message
+        alert('Your assessment results have been saved.');
+      }
+      
+      /**
+       * Save assessment result to storage
+       * @param {Object} result - Assessment result
+       */
+      function saveAssessmentResult(result) {
+        // Get existing results
+        let results = JSON.parse(localStorage.getItem(`assessment_results_${username}`) || '[]');
+        
+        // Add new result
+        results.push(result);
+        
+        // Save to localStorage
+        localStorage.setItem(`assessment_results_${username}`, JSON.stringify(results));
+      }
+      
+      /**
+       * Load assessment history
+       */
+      function loadAssessmentHistory() {
+        // Get assessment results
+        const results = JSON.parse(localStorage.getItem(`assessment_results_${username}`) || '[]');
+        
+        // Clear existing items
+        phq9Items.innerHTML = '';
+        gad7Items.innerHTML = '';
+        griefItems.innerHTML = '';
+        
+        // Hide all sections initially
+        phq9History.style.display = 'none';
+        gad7History.style.display = 'none';
+        griefHistory.style.display = 'none';
+        
+        if (results.length === 0) {
+          // Show no history message
+          noHistory.style.display = 'block';
+          return;
+        }
+        
+        // Hide no history message
+        noHistory.style.display = 'none';
+        
+        // Filter and sort results by type and date
+        const phq9Results = results.filter(r => r.type === 'phq9')
+                                 .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+        
+        const gad7Results = results.filter(r => r.type === 'gad7')
+                                .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+        
+        const griefResults = results.filter(r => r.type === 'grief')
+                                 .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+        
+        // Display PHQ-9 results
+        if (phq9Results.length > 0) {
+          phq9History.style.display = 'block';
+          
+          phq9Results.forEach(result => {
+            // Create history item
+            const historyItem = createHistoryItem(result);
+            phq9Items.appendChild(historyItem);
+          });
+        }
+        
+        // Display GAD-7 results
+        if (gad7Results.length > 0) {
+          gad7History.style.display = 'block';
+          
+          gad7Results.forEach(result => {
+            // Create history item
+            const historyItem = createHistoryItem(result);
+            gad7Items.appendChild(historyItem);
+          });
+        }
+        
+        // Display Grief Scale results
+        if (griefResults.length > 0) {
+          griefHistory.style.display = 'block';
+          
+          griefResults.forEach(result => {
+            // Create history item
+            const historyItem = createHistoryItem(result);
+            griefItems.appendChild(historyItem);
+          });
+        }
+      }
+      
+      /**
+       * Create a history item element
+       * @param {Object} result - Assessment result
+       * @returns {HTMLElement} History item element
+       */
+      function createHistoryItem(result) {
+        // Create history item element
+        const historyItem = document.createElement('div');
+        historyItem.className = 'history-item';
+        
+        // Format date
+        const resultDate = new Date(result.timestamp);
+        const formattedDate = resultDate.toLocaleDateString('en-US', {
+          month: 'short',
+          day: 'numeric',
+          year: 'numeric'
+        });
+        
+        // Create history item HTML
+        historyItem.innerHTML = `
+          <div class="history-date">${formattedDate}</div>
+          <div class="history-score">
+            <span>Score: <strong>${result.score}</strong></span>
+            <span>|</span>
+            <span>Interpretation: <strong>${result.interpretation}</strong></span>
+          </div>
+          <div class="history-actions">
+            <button class="btn btn-secondary btn-sm view-details-btn" data-id="${result.id}">View Details</button>
+          </div>
+        `;
+        
+        // Add view details button event
+        historyItem.querySelector('.view-details-btn').addEventListener('click', () => {
+          viewResultDetails(result);
+        });
+        
+        return historyItem;
+      }
+      
+      /**
+       * View result details
+       * @param {Object} result - Assessment result
+       */
+      function viewResultDetails(result) {
+        // Set assessment type and load definition
+        assessmentType = result.type;
+        currentAssessment = assessments[result.type];
+        
+        // Set modal content
+        modalTitle.textContent = `${result.title} Results`;
+        modalDescription.textContent = `Assessment completed on ${new Date(result.timestamp).toLocaleDateString()}`;
+        
+        // Hide question and navigation
+        const existingQuestion = document.getElementById('current-question');
+        if (existingQuestion) {
+          assessmentContent.removeChild(existingQuestion);
+        }
+        document.querySelector('.assessment-progress').style.display = 'none';
+        document.querySelector('.assessment-actions').style.display = 'none';
+        
+        // Update results section
+        resultScore.textContent = result.score;
+        resultInterpretation.textContent = result.interpretation;
+        
+        // Find interpretation details
+        const interpretation = currentAssessment.interpretations.find(
+          interp => result.score >= interp.range[0] && result.score <= interp.range[1]
+        );
+        
+        resultDetails.innerHTML = `
+          <p>${interpretation.details}</p>
+          <p>Remember that this is just a screening tool and not a diagnosis. If you have concerns about your mental health, please speak with a healthcare professional.</p>
+        `;
+        
+        // Show results section
+        resultsSection.style.display = 'block';
+        
+        // Hide save button (already saved)
+        saveResultBtn.style.display = 'none';
+        
+        // Show close button
+        closeResultBtn.style.display = 'block';
+        
+        // Show modal
+        assessmentModal.style.display = 'flex';
+      }
+      
+      /**
+       * Close the modal
+       */
+      function closeModal() {
+        // Hide modal
+        assessmentModal.style.display = 'none';
+        
+        // Reset state
+        currentAssessment = null;
+        currentQuestionIndex = 0;
+        answers = [];
+        
+        // Show save button (for new assessments)
+        saveResultBtn.style.display = 'block';
+      }
+    });
+  </script>
+</body>
+</html>

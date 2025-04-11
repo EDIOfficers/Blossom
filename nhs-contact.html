@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NHS Support - Blossom</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lato:wght@300;400;700&display=swap">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* NHS Support specific styles */
+    body {
+      background-color: var(--primary-light);
+    }
+    
+    .support-container {
+      padding: var(--space-xxl) 0;
+    }
+    
+    .support-card {
+      background-color: var(--white);
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--shadow-md);
+      padding: var(--space-xl);
+      margin-bottom: var(--space-xl);
+    }
+    
+    .support-header {
+      text-align: center;
+      margin-bottom: var(--space-lg);
+    }
+    
+    .support-title {
+      font-size: var(--font-size-xl);
+      margin-bottom: var(--space-sm);
+    }
+    
+    .support-subtitle {
+      color: var(--text-medium);
+    }
+    
+    .nhs-logo {
+      max-width: 100px;
+      margin: 0 auto var(--space-lg);
+      display: block;
+    }
+    
+    .urgent-help {
+      background-color: #f8d7da;
+      border-left: 4px solid #721c24;
+      padding: var(--space-md);
+      margin: var(--space-lg) 0;
+    }
+    
+    .urgent-help-title {
+      color: #721c24;
+      font-weight: 600;
+      margin-bottom: var(--space-xs);
+    }
+    
+    .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: var(--space-lg);
+      margin-top: var(--space-xl);
+    }
+    
+    .contact-card {
+      background-color: var(--primary-light);
+      border-radius: var(--border-radius-md);
+      padding: var(--space-lg);
+      transition: all var(--transition-medium);
+    }
+    
+    .contact-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-md);
+    }
+    
+    .contact-icon {
+      font-size: 2rem;
+      margin-bottom: var(--space-md);
+      color: var(--accent);
+    }
+    
+    .contact-title {
+      font-size: var(--font-size-lg);
+      margin-bottom: var(--space-sm);
+      font-weight: 600;
+    }
+    
+    .contact-description {
+      color: var(--text-medium);
+      margin-bottom: var(--space-md);
+    }
+    
+    .contact-info {
+      background-color: var(--white);
+      padding: var(--space-md);
+      border-radius: var(--border-radius-sm);
+      margin-bottom: var(--space-md);
+    }
+    
+    .contact-info-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: var(--space-sm);
+    }
+    
+    .contact-info-item:last-child {
+      margin-bottom: 0;
+    }
+    
+    .contact-info-icon {
+      margin-right: var(--space-sm);
+      color: var(--accent);
+    }
+    
+    .contact-info-text {
+      font-weight: 500;
+    }
+    
+    .contact-info-subtext {
+      font-size: var(--font-size-sm);
+      color: var(--text-medium);
+    }
+    
+    .resource-list {
+      list-style: none;
+      margin-top: var(--space-lg);
+    }
+    
+    .resource-item {
+      background-color: var(--primary-light);
+      border-radius: var(--border-radius-md);
+      padding: var(--space-md);
+      margin-bottom: var(--space-md);
+      transition: all var(--transition-fast);
+    }
+    
+    .resource-item:hover {
+      transform: translateX(5px);
+      background-color: var(--primary-medium);
+    }
+    
+    .resource-title {
+      font-weight: 600;
+      margin-bottom: var(--space-xs);
+    }
+    
+    .resource-description {
+      font-size: var(--font-size-sm);
+      color: var(--text-medium);
+      margin-bottom: var(--space-sm);
+    }
+    
+    .accordion {
+      margin-top: var(--space-lg);
+    }
+    
+    .accordion-item {
+      border: 1px solid var(--primary-dark);
+      border-radius: var(--border-radius-md);
+      margin-bottom: var(--space-md);
+      overflow: hidden;
+    }
+    
+    .accordion-header {
+      background-color: var(--primary-light);
+      padding: var(--space-md);
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .accordion-title {
+      font-weight: 600;
+    }
+    
+    .accordion-icon {
+      transition: transform var(--transition-fast);
+    }
+    
+    .accordion-content {
+      padding: var(--space-md);
+      display: none;
+    }
+    
+    .accordion-item.active .accordion-icon {
+      transform: rotate(180deg);
+    }
+    
+    .accordion-item.active .accordion-content {
+      display: block;
+    }
+    
+    .support-section {
+      margin-bottom: var(--space-xl);
+    }
+    
+    .support-section-title {
+      font-size: var(--font-size-lg);
+      margin-bottom: var(--space-md);
+      padding-bottom: var(--space-xs);
+      border-bottom: 1px solid var(--primary-dark);
+    }
+    
+    .appointment-card {
+      background-color: var(--white);
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--shadow-md);
+      padding: var(--space-xl);
+    }
+    
+    .appointment-header {
+      text-align: center;
+      margin-bottom: var(--space-lg);
+    }
+    
+    .appointment-title {
+      font-size: var(--font-size-lg);
+      margin-bottom: var(--space-sm);
+    }
+    
+    .appointment-description {
+      color: var(--text-medium);
+    }
+    
+    .appointment-steps {
+      list-style: none;
+      counter-reset: step-counter;
+      margin-top: var(--space-lg);
+    }
+    
+    .appointment-step {
+      counter-increment: step-counter;
+      display: flex;
+      margin-bottom: var(--space-lg);
+      position: relative;
+    }
+    
+    .appointment-step:last-child {
+      margin-bottom: 0;
+    }
+    
+    .appointment-step:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      left: 20px;
+      top: 50px;
+      height: calc(100% - 20px);
+      width: 2px;
+      background-color: var(--primary-dark);
+    }
+    
+    .step-number {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: var(--accent);
+      color: var(--white);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      flex-shrink: 0;
+      margin-right: var(--space-md);
+      position: relative;
+      z-index: 1;
+    }
+    
+    .step-content {
+      flex: 1;
+    }
+    
+    .step-title {
+      font-weight: 600;
+      margin-bottom: var(--space-xs);
+    }
+    
+    .step-description {
+      color: var(--text-medium);
+      font-size: var(--font-size-sm);
+    }
+    
+    .saved-gp-card {
+      background-color: var(--primary-light);
+      border-radius: var(--border-radius-md);
+      padding: var(--space-md);
+      margin-top: var(--space-lg);
+    }
+    
+    .saved-gp-title {
+      font-weight: 600;
+      margin-bottom: var(--space-sm);
+    }
+    
+    .gp-info {
+      background-color: var(--white);
+      padding: var(--space-md);
+      border-radius: var(--border-radius-sm);
+      margin-bottom: var(--space-md);
+    }
+    
+    .save-gp-form {
+      margin-top: var(--space-lg);
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="container">
+      <div class="header-content">
+        <div class="logo">
+          <svg width="40" height="40" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="45" fill="#f9dfe7" />
+            <path d="M50,30 Q60,20 50,10 Q40,20 50,30 Z" fill="#c9a4b4" />
+            <path d="M70,50 Q80,40 90,50 Q80,60 70,50 Z" fill="#c9a4b4" />
+            <path d="M50,70 Q60,80 50,90 Q40,80 50,70 Z" fill="#c9a4b4" />
+            <path d="M30,50 Q20,40 10,50 Q20,60 30,50 Z" fill="#c9a4b4" />
+            <circle cx="50" cy="50" r="15" fill="#e9dee8" />
+          </svg>
+          <span class="logo-text">Blossom</span>
+        </div>
+        <nav class="nav">
+          <a href="home.html" class="nav-link">Dashboard</a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <!-- Support Container -->
+  <section class="support-container">
+    <div class="container">
+      <div class="row">
+        <!-- Left Column -->
+        <div class="col">
+          <!-- Support Card -->
+          <div class="support-card fade-in">
+            <div class="support-header">
+              <svg class="nhs-logo" viewBox="0 0 122 45" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M0 0H122V45H0V0Z" fill="#005EB8"/>
+                <path d="M96.4 24.2L103.6 13.4H99.8L95.2 20.6L90.8 13.4H86.8L93.8 24L86.2 35.4H90L95 27.4L99.8 35.4H104L96.4 24.2Z" fill="white"/>
+                <path d="M11.8 35.4H16V13.4H11.8V21.8H3.6V13.4H-0.6V35.4H3.6V25.8H11.8V35.4Z" fill="white"/>
+                <path d="M127.6 29.4H120.6V13.4H116.4V35.4H127.6V29.4Z" fill="white"/>
+                <path d="M48.8 35.6C55.8 35.6 60.8 31.4 60.8 24.4C60.8 17.4 55.8 13.2 48.8 13.2C41.6 13.2 36.8 17.4 36.8 24.4C36.8 31.4 41.8 35.6 48.8 35.6ZM48.8 31.6C44.4 31.6 41.2 28.8 41.2 24.4C41.2 20 44.4 17.2 48.8 17.2C53.2 17.2 56.4 20 56.4 24.4C56.4 28.8 53.2 31.6 48.8 31.6Z" fill="white"/>
+                <path d="M69.2 24.4L82.2 24.4V20.4L69.2 20.4V17.4L84 17.4V13.4L65 13.4V35.4L84.4 35.4V31.4L69.2 31.4V24.4Z" fill="white"/>
+                <path d="M28.8 13.4L18.4 35.4H23L24.8 31H36L37.8 35.4H42.6L32.2 13.4H28.8ZM26.4 27L30.4 17.4L34.4 27H26.4Z" fill="white"/>
+              </svg>
+              <h2 class="support-title">NHS Support Services</h2>
+              <p class="support-subtitle">Resources and support available through the National Health Service</p>
+            </div>
+            
+            <div class="urgent-help">
+              <h3 class="urgent-help-title">Need Urgent Help?</h3>
+              <p>If you need urgent medical attention, please call 999 or go to your nearest A&E department.</p>
+              <p>For non-emergency medical advice, you can call NHS 111 or visit <a href="https://111.nhs.uk" target="_blank">111.nhs.uk</a>.</p>
+            </div>
+            
+            <!-- NHS Support Sections -->
+            <div class="support-section">
+              <h3 class="support-section-title">Miscarriage Support Services</h3>
+              <p>The NHS offers a range of services to support people who have experienced miscarriage. These services include medical care, counseling, and information resources.</p>
+              
+              <div class="contact-grid">
+                <!-- Early Pregnancy Unit Card -->
+                <div class="contact-card">
+                  <div class="contact-icon">🏥</div>
+                  <h4 class="contact-title">Early Pregnancy Units</h4>
+                  <p class="contact-description">Specialized units that provide care for women who experience problems in early pregnancy.</p>
+                  <div class="contact-info">
+                    <div class="contact-info-item">
+                      <span class="contact-info-icon">📞</span>
+                      <div>
+                        <div class="contact-info-text">Contact your GP or local hospital</div>
+                        <div class="contact-info-subtext">For referral to your nearest unit</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- GP Support Card -->
+                <div class="contact-card">
+                  <div class="contact-icon">👨‍⚕️</div>
+                  <h4 class="contact-title">General Practitioner (GP)</h4>
+                  <p class="contact-description">Your GP can provide medical care, advice, and referrals to specialized services.</p>
+                  <div class="contact-info">
+                    <div class="contact-info-item">
+                      <span class="contact-info-icon">🔍</span>
+                      <div>
+                        <div class="contact-info-text">Find a GP</div>
+                        <div class="contact-info-subtext"><a href="https://www.nhs.uk/service-search/find-a-gp" target="_blank">NHS GP Finder</a></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- NHS Talking Therapies Card -->
+                <div class="contact-card">
+                  <div class="contact-icon">💬</div>
+                  <h4 class="contact-title">NHS Talking Therapies</h4>
+                  <p class="contact-description">Free psychological therapy services that can help with common mental health problems.</p>
+                  <div class="contact-info">
+                    <div class="contact-info-item">
+                      <span class="contact-info-icon">🔄</span>
+                      <div>
+                        <div class="contact-info-text">Self-referral</div>
+                        <div class="contact-info-subtext"><a href="https://www.nhs.uk/service-search/mental-health/find-a-psychological-therapies-service" target="_blank">Find local services</a></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Additional Resources Section -->
+            <div class="support-section">
+              <h3 class="support-section-title">Additional Support Resources</h3>
+              
+              <ul class="resource-list">
+                <!-- Miscarriage Association -->
+                <li class="resource-item">
+                  <h4 class="resource-title">The Miscarriage Association</h4>
+                  <p class="resource-description">Offers support and information to anyone affected by miscarriage, ectopic pregnancy or molar pregnancy.</p>
+                  <a href="https://www.miscarriageassociation.org.uk" target="_blank" class="btn btn-secondary">Visit Website</a>
+                </li>
+                
+                <!-- Tommy's -->
+                <li class="resource-item">
+                  <h4 class="resource-title">Tommy's</h4>
+                  <p class="resource-description">Funds research into miscarriage, stillbirth and premature birth, and provides information for parents-to-be.</p>
+                  <a href="https://www.tommys.org" target="_blank" class="btn btn-secondary">Visit Website</a>
+                </li>
+                
+                <!-- Cruse Bereavement Care -->
+                <li class="resource-item">
+                  <h4 class="resource-title">Cruse Bereavement Care</h4>
+                  <p class="resource-description">Offers support, advice and information to children, young people and adults when someone dies.</p>
+                  <a href="https://www.cruse.org.uk" target="_blank" class="btn btn-secondary">Visit Website</a>
+                </li>
+              </ul>
+            </div>
+            
+            <!-- FAQ Section -->
+            <div class="support-section">
+              <h3 class="support-section-title">Frequently Asked Questions</h3>
+              
+              <div class="accordion">
+                <div class="accordion-item">
+                  <div class="accordion-header">
+                    <span class="accordion-title">What is the NHS pathway after miscarriage?</span>
+                    <span class="accordion-icon">▼</span>
+                  </div>
+                  <div class="accordion-content">
+                    <p>After a miscarriage, the NHS typically offers follow-up care that may include:</p>
+                    <ul>
+                      <li>Medical management to ensure physical recovery</li>
+                      <li>Blood tests to monitor hormone levels</li>
+                      <li>Emotional support services</li>
+                      <li>Referral to specialist services if needed</li>
+                    </ul>
+                    <p>Your GP will usually be your first point of contact for coordinating this care.</p>
+                  </div>
+                </div>
+                
+                <div class="accordion-item">
+                  <div class="accordion-header">
+                    <span class="accordion-title">Can I get counseling through the NHS after a miscarriage?</span>
+                    <span class="accordion-icon">▼</span>
+                  </div>
+                  <div class="accordion-content">
+                    <p>Yes, the NHS offers various counseling services for those who have experienced miscarriage. You can access these through:</p>
+                    <ul>
+                      <li>Your GP, who can refer you to local services</li>
+                      <li>NHS Talking Therapies (formerly IAPT) which you can self-refer to</li>
+                      <li>Hospital chaplaincy services</li>
+                      <li>Specialist midwives in some hospitals</li>
+                    </ul>
+                    <p>These services are free, though there may be waiting lists depending on your location.</p>
+                  </div>
+                </div>
+                
+                <div class="accordion-item">
+                  <div class="accordion-header">
+                    <span class="accordion-title">When should I contact a doctor after a miscarriage?</span>
+                    <span class="accordion-icon">▼</span>
+                  </div>
+                  <div class="accordion-content">
+                    <p>You should contact a doctor immediately if you experience:</p>
+                    <ul>
+                      <li>Heavy bleeding (soaking through a pad in less than an hour)</li>
+                      <li>Severe pain that isn't relieved by pain medication</li>
+                      <li>Fever above 38°C (100.4°F)</li>
+                      <li>Foul-smelling discharge</li>
+                      <li>Feeling very weak or faint</li>
+                    </ul>
+                    <p>Even without these symptoms, it's recommended to schedule a follow-up appointment with your GP after a miscarriage to ensure proper physical and emotional recovery.</p>
+                  </div>
+                </div>
+                
+                <div class="accordion-item">
+                  <div class="accordion-header">
+                    <span class="accordion-title">What tests can the NHS offer after recurrent miscarriages?</span>
+                    <span class="accordion-icon">▼</span>
+                  </div>
+                  <div class="accordion-content">
+                    <p>After three or more consecutive miscarriages (recurrent miscarriage), the NHS typically offers investigations that may include:</p>
+                    <ul>
+                      <li>Blood tests to check hormone levels and immune factors</li>
+                      <li>Genetic testing for both partners</li>
+                      <li>Ultrasound scans to check the structure of the uterus</li>
+                      <li>Tests for specific conditions like antiphospholipid syndrome</li>
+                    </ul>
+                    <p>You'll usually be referred to a specialist recurrent miscarriage clinic for these tests. Ask your GP for a referral if you've experienced recurrent miscarriages.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Right Column -->
+        <div class="col">
+          <!-- Appointment Information Card -->
+          <div class="appointment-card slide-in">
+            <div class="appointment-header">
+              <h2 class="appointment-title">Making an Appointment</h2>
+              <p class="appointment-description">How to access NHS services for miscarriage support</p>
+            </div>
+            
+            <ol class="appointment-steps">
+              <li class="appointment-step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                  <h4 class="step-title">Contact Your GP</h4>
+                  <p class="step-description">Your General Practitioner is usually the first point of contact. They can provide initial support and refer you to specialized services if needed.</p>
+                </div>
+              </li>
+              
+              <li class="appointment-step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                  <h4 class="step-title">Early Pregnancy Unit</h4>
+                  <p class="step-description">If you're experiencing symptoms, you may be referred to an Early Pregnancy Unit. Some units accept self-referrals in urgent situations.</p>
+                </div>
+              </li>
+              
+              <li class="appointment-step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                  <h4 class="step-title">Follow-up Care</h4>
+                  <p class="step-description">After initial treatment, your GP or hospital will arrange follow-up appointments to monitor your recovery.</p>
+                </div>
+              </li>
+              
+              <li class="appointment-step">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                  <h4 class="step-title">Emotional Support</h4>
+                  <p class="step-description">Ask your GP about referrals to counseling services or self-refer to NHS Talking Therapies for emotional support.</p>
+                </div>
+              </li>
+            </ol>
+            
+            <!-- GP Information Card -->
+            <div id="saved-gp-section" class="saved-gp-card" style="display: none;">
+              <h3 class="saved-gp-title">Your Saved GP Information</h3>
+              <div class="gp-info" id="gp-info-display">
+                <!-- GP info will be displayed here -->
+              </div>
+              
+              <button class="btn btn-secondary" id="edit-gp-btn">Edit Information</button>
+              <button class="btn btn-secondary" id="remove-gp-btn">Remove Information</button>
+            </div>
+            
+            <!-- Save GP Form -->
+            <div id="save-gp-section" class="save-gp-form">
+              <h3 class="saved-gp-title">Save Your GP Information</h3>
+              <p>Store your GP details for easy reference</p>
+              
+              <form id="gp-form">
+                <div class="form-group">
+                  <label for="gp-name" class="form-label">GP Name</label>
+                  <input type="text" id="gp-name" class="form-control" placeholder="Dr. Jane Smith">
+                </div>
+                
+                <div class="form-group">
+                  <label for="practice-name" class="form-label">Practice Name</label>
+                  <input type="text" id="practice-name" class="form-control" placeholder="Highfield Medical Centre">
+                </div>
+                
+                <div class="form-group">
+                  <label for="gp-phone" class="form-label">Phone Number</label>
+                  <input type="tel" id="gp-phone" class="form-control" placeholder="020 1234 5678">
+                </div>
+                
+                <div class="form-group">
+                  <label for="gp-address" class="form-label">Address</label>
+                  <textarea id="gp-address" class="form-control" rows="3" placeholder="123 High Street, London, AB12 3CD"></textarea>
+                </div>
+                
+                <div class="form-actions">
+                  <button type="submit" class="btn btn-primary">Save GP Information</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bottom">
+        <p>&copy; 2025 Blossom v1.0 | <a href="#">Feedback</a> | <a href="#">Privacy Policy</a></p>
+        <p class="text-muted">This app is for support only and does not replace professional medical advice.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/storage.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Authentication check
+      if (!Storage.isAuthenticated()) {
+        window.location.href = 'auth.html';
+        return;
+      }
+      
+      // Get current user
+      const currentUser = Storage.getCurrentUser();
+      const username = currentUser.username;
+      
+      // Elements
+      const savedGpSection = document.getElementById('saved-gp-section');
+      const saveGpSection = document.getElementById('save-gp-section');
+      const gpInfoDisplay = document.getElementById('gp-info-display');
+      const gpForm = document.getElementById('gp-form');
+      const editGpBtn = document.getElementById('edit-gp-btn');
+      const removeGpBtn = document.getElementById('remove-gp-btn');
+      
+      // Accordion functionality
+      document.querySelectorAll('.accordion-header').forEach(header => {
+        header.addEventListener('click', () => {
+          const accordionItem = header.parentElement;
+          accordionItem.classList.toggle('active');
+        });
+      });
+      
+      // Load GP info if exists
+      loadGpInfo();
+      
+      // GP form submission
+      gpForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        // Get form values
+        const gpName = document.getElementById('gp-name').value.trim();
+        const practiceName = document.getElementById('practice-name').value.trim();
+        const gpPhone = document.getElementById('gp-phone').value.trim();
+        const gpAddress = document.getElementById('gp-address').value.trim();
+        
+        // Validate form
+        if (!gpName || !practiceName || !gpPhone) {
+          alert('Please fill in all required fields.');
+          return;
+        }
+        
+        // Create GP info object
+        const gpInfo = {
+          name: gpName,
+          practice: practiceName,
+          phone: gpPhone,
+          address: gpAddress
+        };
+        
+        // Save to localStorage
+        localStorage.setItem(`gp_info_${username}`, JSON.stringify(gpInfo));
+        
+        // Update UI
+        loadGpInfo();
+        
+        // Show success message
+        alert('GP information saved successfully!');
+      });
+      
+      // Edit GP info button
+      editGpBtn.addEventListener('click', () => {
+        // Show GP form
+        saveGpSection.style.display = 'block';
+        
+        // Get GP info
+        const gpInfo = JSON.parse(localStorage.getItem(`gp_info_${username}`));
+        
+        // Fill form with existing data
+        document.getElementById('gp-name').value = gpInfo.name || '';
+        document.getElementById('practice-name').value = gpInfo.practice || '';
+        document.getElementById('gp-phone').value = gpInfo.phone || '';
+        document.getElementById('gp-address').value = gpInfo.address || '';
+      });
+      
+      // Remove GP info button
+      removeGpBtn.addEventListener('click', () => {
+        // Confirm removal
+        if (confirm('Are you sure you want to remove your saved GP information?')) {
+          // Remove from localStorage
+          localStorage.removeItem(`gp_info_${username}`);
+          
+          // Update UI
+          loadGpInfo();
+          
+          // Show success message
+          alert('GP information removed successfully!');
+        }
+      });
+      
+      /**
+       * Load GP information
+       */
+      function loadGpInfo() {
+        // Get GP info from localStorage
+        const gpInfo = JSON.parse(localStorage.getItem(`gp_info_${username}`));
+        
+        if (gpInfo) {
+          // Show saved GP section
+          savedGpSection.style.display = 'block';
+          
+          // Hide save GP form
+          saveGpSection.style.display = 'none';
+          
+          // Update GP info display
+          gpInfoDisplay.innerHTML = `
+            <p><strong>${gpInfo.name}</strong></p>
+            <p>${gpInfo.practice}</p>
+            <p>📞 ${gpInfo.phone}</p>
+            ${gpInfo.address ? `<p>📍 ${gpInfo.address}</p>` : ''}
+          `;
+        } else {
+          // Hide saved GP section
+          savedGpSection.style.display = 'none';
+          
+          // Show save GP form
+          saveGpSection.style.display = 'block';
+        }
+      }
+    });
+  </script>
+</body>
+</html>
