@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Chatbot - Blossom</title>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lato:wght@300;400;700&display=swap">
-  <link rel="stylesheet" href="css/style.css">
-  <style>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lato:wght@300;400;700&display=swap" />
+  <link rel="stylesheet" href="css/style.css" />
+<style>
     /* Chat interface specific styles */
     body {
       background-color: var(--primary-light);
@@ -237,23 +237,22 @@
     }
   </style>
 </head>
+<!-- marked.js -->
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<!-- DOMPurify -->
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.5/dist/purify.min.js"></script>
+
 <body>
-  <!-- Chat Container -->
   <div class="chat-container">
-    <!-- Chat Header -->
+    <!-- header, welcome message -->
     <div class="chat-header">
-      <a href="home.html" class="back-button">
-        <span>&larr;</span>&nbsp;Back
-      </a>
+      <a href="home.html" class="back-button"><span>&larr;</span>&nbsp;Back</a>
       <div class="chat-title">Blossom Support</div>
       <button class="options-button">⋮</button>
     </div>
-    
-    <!-- Chat Window -->
+
     <div class="chat-window" id="chat-window">
       <div class="date-separator">Today</div>
-      
-      <!-- Welcome message from bot -->
       <div class="message message-bot">
         <div class="message-content">
           Hello there! I'm your Blossom companion. I'm here to listen and support you through your healing journey. How are you feeling today?
@@ -265,16 +264,14 @@
           <button class="action-button">I just want to talk</button>
         </div>
       </div>
-      
-      <!-- Typing indicator (initially hidden) -->
       <div class="typing-indicator" id="typing-indicator" style="display: none;">
         <div class="typing-bubble"></div>
         <div class="typing-bubble"></div>
         <div class="typing-bubble"></div>
       </div>
     </div>
-    
-    <!-- Chat Input -->
+
+    <!-- Input -->
     <div class="chat-input-container">
       <div class="emoji-buttons">
         <button class="emoji-button">❤️</button>
@@ -291,328 +288,130 @@
     </div>
   </div>
 
-  <script src="js/storage.js"></script>
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      // Authentication check
-      if (!Storage.isAuthenticated()) {
-        window.location.href = 'auth.html';
-        return;
-      }
-      
-      // Get current user
-      const currentUser = Storage.getCurrentUser();
-      const username = currentUser.username;
-      
-      // Elements
-      const chatWindow = document.getElementById('chat-window');
-      const chatInput = document.getElementById('chat-input');
-      const sendButton = document.getElementById('send-button');
-      const typingIndicator = document.getElementById('typing-indicator');
-      
-      // Auto resize textarea
-      chatInput.addEventListener('input', function() {
-        this.style.height = 'auto';
-        this.style.height = (this.scrollHeight) + 'px';
+    document.addEventListener("DOMContentLoaded", () => {
+      const chatWindow = document.getElementById("chat-window");
+      const chatInput = document.getElementById("chat-input");
+      const sendButton = document.getElementById("send-button");
+      const typingIndicator = document.getElementById("typing-indicator");
+
+      // Auto-resize textarea
+      chatInput.addEventListener("input", function () {
+        this.style.height = "auto";
+        this.style.height = this.scrollHeight + "px";
       });
-      
-      // Create or get conversation
-      let currentConversationId;
-      
-      function initializeChat() {
-        // Create a new conversation if one doesn't exist
-        currentConversationId = Storage.createNewConversation(username);
-        
-        // Add welcome message to storage
-        const welcomeMessage = {
-          sender: 'bot',
-          content: "Hello there! I'm your Blossom companion. I'm here to listen and support you through your healing journey. How are you feeling today?",
-          timestamp: new Date().toISOString()
-        };
-        
-        Storage.saveChatMessage(username, currentConversationId, welcomeMessage);
-      }
-      
-      // Add a message to the chat window
-      function addMessageToChat(sender, content, timestamp) {
-        const messageElement = document.createElement('div');
+
+      function addMessageToChat(sender, content) {
+        const messageElement = document.createElement("div");
         messageElement.className = `message message-${sender}`;
-        
-        const messageContent = document.createElement('div');
-        messageContent.className = 'message-content';
-        messageContent.textContent = content;
+        const messageContent = document.createElement("div");
+        messageContent.className = "message-content";
+        const rawHtml = marked.parse(content);
+        messageContent.innerHTML = DOMPurify.sanitize(rawHtml);
+
         messageElement.appendChild(messageContent);
-        
-        // Format timestamp
-        const messageTime = new Date(timestamp);
-        const formattedTime = messageTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        
-        const timestampElement = document.createElement('div');
-        timestampElement.className = 'message-timestamp';
-        timestampElement.textContent = formattedTime;
+
+        const timestampElement = document.createElement("div");
+        timestampElement.className = "message-timestamp";
+        const now = new Date();
+        timestampElement.textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
         messageElement.appendChild(timestampElement);
-        
-        // Add action buttons if it's a bot message
-        if (sender === 'bot') {
-          // Simple response suggestions based on message content
-          let suggestions = [];
-          
-          if (content.includes('feeling')) {
-            suggestions = ["I'm feeling okay", "I'm struggling today", "I just want to talk"];
-          } else if (content.includes('support')) {
-            suggestions = ["Tell me more", "What resources are available?", "I need professional help"];
-          } else {
-            suggestions = ["Yes", "No", "Tell me more"];
-          }
-          
-          if (suggestions.length > 0) {
-            const actionButtons = document.createElement('div');
-            actionButtons.className = 'action-buttons';
-            
-            suggestions.forEach(suggestion => {
-              const button = document.createElement('button');
-              button.className = 'action-button';
-              button.textContent = suggestion;
-              button.addEventListener('click', () => {
-                sendMessage(suggestion);
-              });
-              actionButtons.appendChild(button);
-            });
-            
-            messageElement.appendChild(actionButtons);
-          }
-        }
-        
+
         chatWindow.appendChild(messageElement);
         chatWindow.scrollTop = chatWindow.scrollHeight;
+        return messageContent;
       }
-      
-      // Show typing indicator
+
       function showTypingIndicator() {
-        typingIndicator.style.display = 'flex';
+        typingIndicator.style.display = "flex";
         chatWindow.scrollTop = chatWindow.scrollHeight;
       }
-      
-      // Hide typing indicator
+
       function hideTypingIndicator() {
-        typingIndicator.style.display = 'none';
+        typingIndicator.style.display = "none";
       }
-      
-      // Bot responses
-      const botResponses = [
-        {
-          triggers: ['hello', 'hi', 'hey'],
-          responses: [
-            "Hi there. How are you feeling today?",
-            "Hello. I'm here to listen. How are you doing?"
-          ]
-        },
-        {
-          triggers: ['sad', 'upset', 'unhappy', 'down', 'depressed', 'low'],
-          responses: [
-            "I'm sorry to hear you're feeling this way. It's completely understandable to feel sad after what you've been through.",
-            "It's okay to feel sad. Your feelings are valid and important. Would you like to talk more about what's making you feel this way?",
-            "Grief and sadness can come in waves. I'm here to listen whenever you need someone."
-          ]
-        },
-        {
-          triggers: ['angry', 'mad', 'frustrated', 'unfair'],
-          responses: [
-            "It's normal to feel angry or frustrated. These are natural responses to loss and you shouldn't feel guilty about them.",
-            "Anger is a valid emotion in your healing journey. Would you like to explore ways to express this anger in healthy ways?",
-            "I understand you're feeling frustrated. It's unfair what you've experienced, and it's okay to acknowledge that."
-          ]
-        },
-        {
-          triggers: ['scared', 'afraid', 'anxious', 'worried', 'fear'],
-          responses: [
-            "It's understandable to feel anxious or worried. Would it help to talk about your specific concerns?",
-            "Fear is a common response after a miscarriage. Many people worry about the future. Is there something specific you're concerned about?",
-            "Anxiety can be overwhelming. Remember to take things one day at a time. Would you like to try a simple breathing exercise together?"
-          ]
-        },
-        {
-          triggers: ['lonely', 'alone', 'isolated', 'no one understands'],
-          responses: [
-            "It can feel very isolating, but you're not alone in this experience. Many people feel the same way you do.",
-            "I'm sorry you're feeling lonely. Would it help to connect with others who have had similar experiences?",
-            "It's difficult when you feel like no one understands. I'm here to listen without judgment."
-          ]
-        },
-        {
-          triggers: ['hopeful', 'better', 'improving', 'positive'],
-          responses: [
-            "I'm glad you're feeling more hopeful. Small steps forward are worth celebrating.",
-            "That's wonderful to hear. Healing isn't always linear, but these moments of positivity are important.",
-            "I'm happy you're feeling better today. What has been helping you feel this way?"
-          ]
-        },
-        {
-          triggers: ['tired', 'exhausted', 'fatigued', 'sleep'],
-          responses: [
-            "Physical and emotional exhaustion are common during this time. Are you able to get enough rest?",
-            "It can be difficult to sleep when you're processing grief. Would you like some gentle suggestions that might help?",
-            "Feeling tired is natural as your body and mind are working hard to heal. Be gentle with yourself."
-          ]
-        },
-        {
-          triggers: ['guilty', 'blame', 'my fault', 'did something wrong'],
-          responses: [
-            "Please know that miscarriage is almost never caused by anything the mother did or didn't do. This was not your fault.",
-            "Many people experience feelings of guilt after miscarriage, but it's important to know that you did nothing wrong.",
-            "Self-blame is common, but miscarriage is almost always due to factors completely beyond your control."
-          ]
-        },
-        {
-          triggers: ['future', 'try again', 'pregnancy', 'baby'],
-          responses: [
-            "Thinking about the future can bring up many emotions. It's okay to take time before making any decisions.",
-            "It's normal to have questions and concerns about future pregnancies. Have you spoken with your healthcare provider about this?",
-            "Everyone's timeline for healing and moving forward is different. There's no rush to make any decisions right now."
-          ]
-        },
-        {
-          triggers: ['help', 'resource', 'support', 'therapy', 'counseling'],
-          responses: [
-            "There are many resources available to support you. Would you like to know about some support groups or counseling options?",
-            "Professional support can be very helpful. Would you like me to suggest some resources?",
-            "Talking with a counselor who specializes in pregnancy loss can be beneficial. Would you like information about finding one?"
-          ]
-        },
-        {
-          triggers: ['partner', 'husband', 'wife', 'spouse', 'relationship'],
-          responses: [
-            "Partners often grieve differently, which can sometimes create distance. Have you been able to talk with each other about how you're both feeling?",
-            "It can be challenging when you and your partner process grief in different ways. Would it help to discuss some communication strategies?",
-            "Your partner may also be grieving, though perhaps in a different way. Sometimes couples counseling can help navigate this together."
-          ]
-        },
-        {
-          triggers: ['physical', 'pain', 'bleeding', 'cramps', 'symptoms'],
-          responses: [
-            "If you're experiencing concerning physical symptoms, it's important to contact your healthcare provider right away.",
-            "Physical recovery is an important part of healing. Have you been able to follow up with your doctor?",
-            "Physical discomfort can add to the emotional difficulty. Are you managing okay with pain relief methods suggested by your doctor?"
-          ]
-        }
-      ];
-      
-      // Default responses when no keyword match is found
-      const defaultResponses = [
-        "I'm here to listen. Can you tell me more about how you're feeling?",
-        "Thank you for sharing that with me. Would you like to talk more about it?",
-        "I understand this is a difficult time. What would be most helpful for you right now?",
-        "I'm here to support you through this journey. Is there something specific you'd like to discuss?",
-        "Your feelings are valid and important. Would you like to explore this further?"
-      ];
-      
-      // Get bot response based on user message
-      function getBotResponse(userMessage) {
-        const lowercaseMessage = userMessage.toLowerCase();
-        
-        // Check for keyword matches
-        for (const responseSet of botResponses) {
-          for (const trigger of responseSet.triggers) {
-            if (lowercaseMessage.includes(trigger)) {
-              // Return random response from matched category
-              const randomIndex = Math.floor(Math.random() * responseSet.responses.length);
-              return responseSet.responses[randomIndex];
+
+      async function sendMessage(message) {
+        if (!message.trim()) return;
+
+        // User message
+        addMessageToChat("user", message);
+        chatInput.value = "";
+        chatInput.style.height = "auto";
+
+        // Typing
+        showTypingIndicator();
+
+        try {
+          const response = await fetch("xxxxxxxx/api/chat", {
+            method: "POST",
+            headers: {
+              "Authorization": "Bearer xxxxxxxxxx",
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              model: "gemma3:27b",
+              messages: [
+                {
+                  role: "system",
+                  content: "You are Blossom, a helpful and friendly assistant developed by the EDI Officers team at King’s College London. When asked about your identity, always say you are Blossom, created by the EDI Officers team."
+                },
+                { role: "user",
+                  content: message 
+                }
+              ]
+            })
+          });
+
+          const reader = response.body.getReader();
+          const decoder = new TextDecoder("utf-8");
+          let fullText = "";
+          const messageContentDiv = addMessageToChat("bot", "");
+
+          while (true) {
+            const { value, done } = await reader.read();
+            if (done) break;
+            const chunk = decoder.decode(value);
+
+            try {
+              const parsed = JSON.parse(chunk);
+              const text = parsed?.message?.content;
+              if (text) {
+                fullText += text;
+                messageContentDiv.textContent = fullText;
+                chatWindow.scrollTop = chatWindow.scrollHeight;
+              }
+            } catch (err) {
+              console.warn("JSON parse error:", err, chunk);
             }
           }
-        }
-        
-        // No keyword match, return default response
-        const randomIndex = Math.floor(Math.random() * defaultResponses.length);
-        return defaultResponses[randomIndex];
-      }
-      
-      // Send message function
-      function sendMessage(message) {
-        if (!message.trim()) return;
-        
-        const timestamp = new Date().toISOString();
-        
-        // Add user message to UI and storage
-        addMessageToChat('user', message, timestamp);
-        Storage.saveChatMessage(username, currentConversationId, {
-          sender: 'user',
-          content: message,
-          timestamp
-        });
-        
-        // Clear input
-        chatInput.value = '';
-        chatInput.style.height = 'auto';
-        
-        // Show typing indicator
-        showTypingIndicator();
-        
-        // Simulate bot thinking and typing
-        setTimeout(() => {
+        } catch (err) {
+          addMessageToChat("bot", "Sorry, something went wrong. Please try again.");
+        } finally {
           hideTypingIndicator();
-          
-          // Generate and add bot response
-          const botResponse = getBotResponse(message);
-          const botTimestamp = new Date().toISOString();
-          
-          addMessageToChat('bot', botResponse, botTimestamp);
-          Storage.saveChatMessage(username, currentConversationId, {
-            sender: 'bot',
-            content: botResponse,
-            timestamp: botTimestamp
-          });
-        }, 1000 + Math.random() * 1000); // Random delay between 1-2 seconds
+        }
       }
-      
-      // Handle send button click
-      sendButton.addEventListener('click', () => {
+
+      // Send button
+      sendButton.addEventListener("click", () => {
         sendMessage(chatInput.value);
       });
-      
-      // Handle enter key press
-      chatInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter' && !e.shiftKey) {
+
+      // Enter key
+      chatInput.addEventListener("keypress", (e) => {
+        if (e.key === "Enter" && !e.shiftKey) {
           e.preventDefault();
           sendMessage(chatInput.value);
         }
       });
-      
-      // Handle emoji button clicks
-      document.querySelectorAll('.emoji-button').forEach(button => {
-        button.addEventListener('click', () => {
+
+      // Emoji buttons
+      document.querySelectorAll(".emoji-button").forEach((button) => {
+        button.addEventListener("click", () => {
           chatInput.value += button.textContent;
           chatInput.focus();
         });
       });
-      
-      // Initialize the chat
-      initializeChat();
-      
-      // Load existing conversation or create a new one
-      const chatHistory = Storage.getChatHistory(username);
-      
-      if (chatHistory && chatHistory.conversations.length > 0) {
-        // Get the most recent conversation
-        const latestConversation = chatHistory.conversations.sort((a, b) => 
-          new Date(b.timestamp) - new Date(a.timestamp)
-        )[0];
-        
-        currentConversationId = latestConversation.id;
-        
-        // Clear default welcome message
-        chatWindow.innerHTML = '';
-        
-        // Add date separator
-        const dateSeparator = document.createElement('div');
-        dateSeparator.className = 'date-separator';
-        dateSeparator.textContent = 'Today';
-        chatWindow.appendChild(dateSeparator);
-        
-        // Load messages
-        latestConversation.messages.forEach(message => {
-          addMessageToChat(message.sender, message.content, message.timestamp);
-        });
-      }
     });
   </script>
 </body>
