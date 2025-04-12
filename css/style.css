@@ -417,3 +417,39 @@ a:hover {
 .slide-in {
   animation: slideIn var(--transition-medium) forwards;
 }
+
+/* Compact partner logos with minimal spacing */
+.compact-partner-logos {
+  padding-top: 5px; /* Minimal top spacing */
+  padding-bottom: 20px;
+  background-color: var(--white);
+}
+
+.logo-wrapper {
+  display: flex;
+  justify-content: flex-end; /* Align to the right */
+  gap: 20px; /* Small gap between logos */
+  margin-bottom: 5px;
+}
+
+.partner-logo {
+  max-height: 70px; /* Slightly smaller logos */
+  width: auto;
+}
+
+.partner-text {
+  text-align: right; /* Align text to the right with the logos */
+  color: var(--text-medium);
+  font-size: var(--font-size-sm);
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .logo-wrapper {
+    justify-content: center;
+  }
+  
+  .partner-text {
+    text-align: center;
+  }
+}

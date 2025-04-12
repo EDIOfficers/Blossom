@@ -343,10 +343,10 @@
         showTypingIndicator();
 
         try {
-          const response = await fetch("xxxxxxxx/api/chat", {
+          const response = await fetch("https://ai.create.kcl.ac.uk/ollama/api/chat", {
             method: "POST",
             headers: {
-              "Authorization": "Bearer xxxxxxxxxx",
+              "Authorization": "Bearer sk-e32ba118d72947ed875d7d3b717ef8ed",
               "Content-Type": "application/json"
             },
             body: JSON.stringify({
