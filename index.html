@@ -23,8 +23,13 @@
     .hero-content {
       max-width: 600px;
       text-align: center;
+      margin-left: auto;
+      margin-right: auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
-    
+
     .hero-title {
       font-size: 2.5rem;
       margin-bottom: var(--space-lg);
@@ -146,7 +151,11 @@
           </svg>
           <span class="logo-text">Blossom</span>
         </div>
-        
+        <nav class="nav">
+          <a href="index.html" class="nav-link">Home</a>
+          <a href="about-us.html" class="nav-link">About Us</a>
+          <a href="auth.html?mode=login" class="nav-link">Login</a>
+        </nav>
         <div id="admin-links" style="display: none;">
           <a href="init.html" class="nav-link">System Init</a>
         </div>
@@ -188,6 +197,7 @@
           <h3 class="footer-title">Quick Links</h3>
           <ul class="footer-links">
             <li class="footer-link"><a href="#">About</a></li>
+            <li class="footer-link"><a href="about-us.html">About Us</a></li>
             <li class="footer-link"><a href="#">Contact</a></li>
             <li class="footer-link"><a href="#">Support</a></li>
           </ul>

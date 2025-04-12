@@ -380,6 +380,15 @@ a:hover {
   }
 }
 
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+  }
+
+  .logout-button {
+    margin-left: var(--space-md);
+  }
 /* ===== Animations ===== */
 @keyframes fadeIn {
   from {

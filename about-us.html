@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Us - Blossom</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lato:wght@300;400;700&display=swap">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* About Us specific styles */
+    body {
+      background-color: var(--primary-light);
+    }
+    
+    .about-container {
+      padding: var(--space-xxl) 0;
+    }
+    
+    .about-card {
+      background-color: var(--white);
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--shadow-md);
+      padding: var(--space-xl);
+      margin-bottom: var(--space-xl);
+    }
+    
+    .about-header {
+      text-align: center;
+      margin-bottom: var(--space-xl);
+    }
+    
+    .about-title {
+      font-size: var(--font-size-xl);
+      margin-bottom: var(--space-sm);
+    }
+    
+    .about-subtitle {
+      color: var(--text-medium);
+    }
+    
+    .about-section {
+      margin-bottom: var(--space-xl);
+    }
+    
+    .about-section-title {
+      font-size: var(--font-size-lg);
+      margin-bottom: var(--space-md);
+      padding-bottom: var(--space-xs);
+      border-bottom: 1px solid var(--primary-dark);
+    }
+    
+    .mission-block {
+      background-color: var(--primary-medium);
+      border-radius: var(--border-radius-md);
+      padding: var(--space-lg);
+      margin: var(--space-lg) 0;
+      border-left: 4px solid var(--accent);
+    }
+    
+    .mission-title {
+      font-weight: 600;
+      margin-bottom: var(--space-sm);
+      color: var(--accent);
+    }
+    
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: var(--space-lg);
+      margin-top: var(--space-lg);
+    }
+    
+    .team-member {
+      background-color: var(--white);
+      border-radius: var(--border-radius-md);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      transition: transform var(--transition-medium);
+    }
+    
+    .team-member:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-md);
+    }
+    
+    .member-photo {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      margin: var(--space-md) auto;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: var(--primary-light);
+      color: var(--accent);
+      font-size: 3rem;
+    }
+    
+    .member-content {
+      padding: var(--space-md) var(--space-lg) var(--space-lg);
+      text-align: center;
+    }
+    
+    .member-name {
+      font-size: var(--font-size-lg);
+      font-weight: 600;
+      margin-bottom: var(--space-xs);
+    }
+    
+    .member-role {
+      color: var(--accent);
+      font-weight: 500;
+      margin-bottom: var(--space-md);
+    }
+    
+    .member-bio {
+      color: var(--text-medium);
+      font-size: var(--font-size-sm);
+    }
+    
+    .principles-list {
+      list-style: none;
+      margin: var(--space-lg) 0;
+    }
+    
+    .principle-item {
+      display: flex;
+      margin-bottom: var(--space-lg);
+    }
+    
+    .principle-icon {
+      flex-shrink: 0;
+      width: 40px;
+      height: 40px;
+      background-color: var(--primary-medium);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: var(--space-md);
+      color: var(--accent);
+      font-size: 1.2rem;
+    }
+    
+    .principle-content {
+      flex: 1;
+    }
+    
+    .principle-title {
+      font-weight: 600;
+      margin-bottom: var(--space-xs);
+    }
+    
+    .principle-description {
+      color: var(--text-medium);
+    }
+    
+    .timeline {
+      position: relative;
+      margin: var(--space-xl) 0;
+      padding-left: 30px;
+    }
+    
+    .timeline:before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 100%;
+      width: 2px;
+      background-color: var(--primary-dark);
+    }
+    
+    .timeline-item {
+      position: relative;
+      margin-bottom: var(--space-lg);
+    }
+    
+    .timeline-item:last-child {
+      margin-bottom: 0;
+    }
+    
+    .timeline-marker {
+      position: absolute;
+      left: -30px;
+      top: 0;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background-color: var(--accent);
+      border: 3px solid var(--white);
+    }
+    
+    .timeline-date {
+      font-weight: 600;
+      margin-bottom: var(--space-xs);
+      color: var(--accent);
+    }
+    
+    .timeline-content {
+      background-color: var(--primary-light);
+      border-radius: var(--border-radius-md);
+      padding: var(--space-md);
+    }
+    
+    .testimonials {
+      margin-top: var(--space-xl);
+    }
+    
+    .testimonial-item {
+      background-color: var(--primary-light);
+      border-radius: var(--border-radius-md);
+      padding: var(--space-lg);
+      margin-bottom: var(--space-lg);
+      position: relative;
+    }
+    
+    .testimonial-item:after {
+      content: '"';
+      position: absolute;
+      top: 10px;
+      right: 20px;
+      font-size: 4rem;
+      color: var(--primary-medium);
+      font-family: serif;
+      line-height: 1;
+      opacity: 0.7;
+    }
+    
+    .testimonial-content {
+      font-style: italic;
+      margin-bottom: var(--space-md);
+    }
+    
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+    }
+    
+    .author-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: var(--primary-medium);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: var(--space-md);
+      color: var(--accent);
+    }
+    
+    .author-info {
+      flex: 1;
+    }
+    
+    .author-name {
+      font-weight: 600;
+    }
+    
+    .author-detail {
+      font-size: var(--font-size-sm);
+      color: var(--text-medium);
+    }
+    
+    .contact-section {
+      background-color: var(--primary-medium);
+      border-radius: var(--border-radius-md);
+      padding: var(--space-lg);
+      margin-top: var(--space-xl);
+      text-align: center;
+    }
+    
+    .contact-title {
+      margin-bottom: var(--space-md);
+    }
+    
+    .contact-options {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: var(--space-lg);
+      margin-top: var(--space-lg);
+    }
+    
+    .contact-option {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 180px;
+    }
+    
+    .contact-icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background-color: var(--white);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: var(--space-sm);
+      color: var(--accent);
+      font-size: 1.5rem;
+    }
+    
+    .contact-label {
+      font-weight: 500;
+      margin-bottom: var(--space-xs);
+    }
+    
+    .contact-value {
+      color: var(--text-medium);
+      font-size: var(--font-size-sm);
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="container">
+      <div class="header-content">
+        <div class="logo">
+          <svg width="40" height="40" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="45" fill="#f9dfe7" />
+            <path d="M50,30 Q60,20 50,10 Q40,20 50,30 Z" fill="#c9a4b4" />
+            <path d="M70,50 Q80,40 90,50 Q80,60 70,50 Z" fill="#c9a4b4" />
+            <path d="M50,70 Q60,80 50,90 Q40,80 50,70 Z" fill="#c9a4b4" />
+            <path d="M30,50 Q20,40 10,50 Q20,60 30,50 Z" fill="#c9a4b4" />
+            <circle cx="50" cy="50" r="15" fill="#e9dee8" />
+          </svg>
+          <span class="logo-text">Blossom</span>
+        </div>
+        <nav class="nav">
+          <a href="index.html" class="nav-link">Home</a>
+          <a href="home.html" class="nav-link">Dashboard</a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <!-- About Container -->
+  <section class="about-container">
+    <div class="container">
+      <!-- About Card -->
+      <div class="about-card fade-in">
+        <div class="about-header">
+          <h2 class="about-title">About Blossom</h2>
+          <p class="about-subtitle">A healing companion after miscarriage loss</p>
+        </div>
+        
+        <!-- Mission Section -->
+        <div class="about-section">
+          <h3 class="about-section-title">Our Mission</h3>
+          
+          <div class="mission-block">
+            <div class="mission-title">Creating a Space for Healing</div>
+            <p>Blossom was created with a single purpose: to provide a safe, supportive, and personalized digital companion for those navigating the complex journey after miscarriage.</p>
+            <p>We believe that healing requires both emotional support and practical resources, delivered with compassion and understanding.</p>
+          </div>
+          
+          <p>Every feature of Blossom has been carefully designed to address the unique needs that arise after pregnancy loss. We recognize that this experience affects each person differently, which is why our platform offers personalized support through mood tracking, journaling, resource connections, and gentle guidance.</p>
+          
+          <p>By combining evidence-based approaches with a human-centered design, Blossom aims to reduce feelings of isolation and provide tools that empower users throughout their healing journey.</p>
+        </div>
+        
+        <!-- Our Team Section -->
+        <div class="about-section">
+          <h3 class="about-section-title">Our Team</h3>
+          
+          <p>Blossom was created by a multidisciplinary team of health professionals, researchers, designers, and developers, many of whom have personal or professional experience with pregnancy loss.</p>
+          
+          <div class="team-grid">
+            <!-- Team Member 1 -->
+            <div class="team-member">
+              <div class="member-photo">LQ</div>
+              <div class="member-content">
+                <div class="member-name">Linglong Qian</div>
+                <div class="member-role">Tech & Designer</div>
+                <p class="member-bio">Linglong’s research bridges deep learning, symbolic reasoning, and medical data science, with a focus on the integration of temporal dynamics, multimodal signals, and clinical text. He is developing the foundational frameworks for health outcome forecasting, such as METHOD models, and contributes to open-source tools for time-series imputation and benchmarking.</p>
+              </div>
+            </div>
+            
+            <!-- Team Member 2 -->
+            <div class="team-member">
+              <div class="member-photo">ZC</div>
+              <div class="member-content">
+                <div class="member-name">Ziyuan Cui</div>
+                <div class="member-role">xx</div>
+                <p class="member-bio">Ziyuan is a PhD student in computational neuroscience, developing model-based pipelines for sensitive and scalable remote cognitive assessment. Her research spans neurodegenerative, neurovascular, and psychiatric disorders, and she is proficient in using statistical models and machine learning to analyze genetic, neuroimaging, EHR, and speech data.</p>
+              </div>
+            </div>
+            
+            <!-- Team Member 3 -->
+            <div class="team-member">
+              <div class="member-photo">BV</div>
+              <div class="member-content">
+                <div class="member-name">Binh Vu</div>
+                <div class="member-role">xx</div>
+                <p class="member-bio">A software engineer committed to building accessible digital tools, Michael leads our technical development.</p>
+              </div>
+            </div>
+            
+            <!-- Team Member 4 -->
+            <div class="team-member">
+              <div class="member-photo">EG</div>
+              <div class="member-content">
+                <div class="member-name">Emily Gillings</div>
+                <div class="member-role">xx</div>
+                <p class="member-bio">Emily is a PhD student with DRIVE-Health at King’s College London. Her research centers on the integration of digital phenotyping into mental health care, with a particular focus on posttraumatic stress disorder (PTSD). She aims to address the challenges of subjectivity in PTSD diagnosis and monitoring by developing a predictive machine learning model that leverages physiological markers to assess symptom severity.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Our Principles Section -->
+        <div class="about-section">
+          <h3 class="about-section-title">Our Principles</h3>
+          
+          <ul class="principles-list">
+            <li class="principle-item">
+              <div class="principle-icon">🤲</div>
+              <div class="principle-content">
+                <div class="principle-title">Compassion-First Approach</div>
+                <p class="principle-description">Every interaction is designed with deep empathy, acknowledging the uniqueness of each person's grief journey.</p>
+              </div>
+            </li>
+            
+            <li class="principle-item">
+              <div class="principle-icon">🔍</div>
+              <div class="principle-content">
+                <div class="principle-title">Evidence-Based Resources</div>
+                <p class="principle-description">Our recommendations and tools are grounded in research and best practices from medical and mental health fields.</p>
+              </div>
+            </li>
+            
+            <li class="principle-item">
+              <div class="principle-icon">🛡️</div>
+              <div class="principle-content">
+                <div class="principle-title">Privacy & Security</div>
+                <p class="principle-description">We maintain the highest standards of data protection, ensuring your personal journey remains private and secure.</p>
+              </div>
+            </li>
+            
+            <li class="principle-item">
+              <div class="principle-icon">🌱</div>
+              <div class="principle-content">
+                <div class="principle-title">Growth-Oriented</div>
+                <p class="principle-description">We recognize healing isn't linear and design features that adapt to wherever you are in your journey.</p>
+              </div>
+            </li>
+            
+            <li class="principle-item">
+              <div class="principle-icon">🔄</div>
+              <div class="principle-content">
+                <div class="principle-title">Continuous Improvement</div>
+                <p class="principle-description">We regularly incorporate user feedback and new research to enhance the support we provide.</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+        
+        <!-- Our Story Section -->
+        <div class="about-section">
+          <h3 class="about-section-title">Our Story</h3>
+          
+          <p>Blossom began in 2023 when our founder, Sarah, experienced a miscarriage and found herself struggling to find digital resources that provided both emotional support and practical guidance in one place.</p>
+          
+          <div class="timeline">
+            <div class="timeline-item">
+              <div class="timeline-marker"></div>
+              <div class="timeline-date">October 2023</div>
+              <div class="timeline-content">
+                <p>Initial concept developed based on interviews with 30+ individuals who had experienced pregnancy loss.</p>
+              </div>
+            </div>
+            
+            <div class="timeline-item">
+              <div class="timeline-marker"></div>
+              <div class="timeline-date">January 2024</div>
+              <div class="timeline-content">
+                <p>Multidisciplinary team assembled, including healthcare professionals, mental health specialists, and technology experts.</p>
+              </div>
+            </div>
+            
+            <div class="timeline-item">
+              <div class="timeline-marker"></div>
+              <div class="timeline-date">March 2024</div>
+              <div class="timeline-content">
+                <p>First prototype developed and tested with a focus group of 15 individuals with lived experience.</p>
+              </div>
+            </div>
+            
+            <div class="timeline-item">
+              <div class="timeline-marker"></div>
+              <div class="timeline-date">June 2024</div>
+              <div class="timeline-content">
+                <p>Beta version launched with improved features based on user feedback. Partnership established with three NHS trusts.</p>
+              </div>
+            </div>
+            
+            <div class="timeline-item">
+              <div class="timeline-marker"></div>
+              <div class="timeline-date">February 2025</div>
+              <div class="timeline-content">
+                <p>Blossom 1.0 officially launched with comprehensive tracking tools, NHS integration, and personalized support resources.</p>
+              </div>
+            </div>
+          </div>
+          
+          <p>Today, Blossom continues to evolve based on user feedback and emerging research, ensuring we provide the most effective and compassionate support possible.</p>
+        </div>
+        
+        <!-- Testimonials Section -->
+        <div class="about-section">
+          <h3 class="about-section-title">What Our Users Say</h3>
+          
+          <div class="testimonials">
+            <div class="testimonial-item">
+              <div class="testimonial-content">
+                <p>Blossom gave me a private space to process my feelings when I wasn't ready to talk about my loss. The daily check-ins and gentle prompts helped me track my healing in a way I wouldn't have done on my own.</p>
+              </div>
+              <div class="testimonial-author">
+                <div class="author-avatar">L</div>
+                <div class="author-info">
+                  <div class="author-name">Lisa T.</div>
+                  <div class="author-detail">Using Blossom since March 2025</div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="testimonial-item">
+              <div class="testimonial-content">
+                <p>What I appreciate most about Blossom is how it connects emotional support with practical health information. The NHS resource integration made it so much easier to find the specific support I needed at each stage.</p>
+              </div>
+              <div class="testimonial-author">
+                <div class="author-avatar">J</div>
+                <div class="author-info">
+                  <div class="author-name">James W.</div>
+                  <div class="author-detail">Using Blossom since February 2025</div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="testimonial-item">
+              <div class="testimonial-content">
+                <p>After my second miscarriage, I felt completely lost. The mood tracking in Blossom helped me visualize my emotional patterns and recognize small improvements I might have otherwise missed. It's been an essential part of my healing journey.</p>
+              </div>
+              <div class="testimonial-author">
+                <div class="author-avatar">K</div>
+                <div class="author-info">
+                  <div class="author-name">Keira N.</div>
+                  <div class="author-detail">Using Blossom since January 2025</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Contact Section -->
+        <div class="about-section">
+          <h3 class="about-section-title">Contact Us</h3>
+          
+          <div class="contact-section">
+            <h4 class="contact-title">We'd love to hear from you</h4>
+            <p>If you have any questions, feedback, or would like to learn more about Blossom, please reach out to us:</p>
+            
+            <div class="contact-options">
+              <div class="contact-option">
+                <div class="contact-icon">📧</div>
+                <div class="contact-label">Email</div>
+                <div class="contact-value">contact@blossomapp.org</div>
+              </div>
+              
+              <div class="contact-option">
+                <div class="contact-icon">📱</div>
+                <div class="contact-label">Phone</div>
+                <div class="contact-value">+44 20 1234 5678</div>
+              </div>
+              
+              <div class="contact-option">
+                <div class="contact-icon">🌐</div>
+                <div class="contact-label">Website</div>
+                <div class="contact-value">www.blossomapp.org</div>
+              </div>
+            </div>
+            
+            <div class="form-actions" style="margin-top: var(--space-xl);">
+              <a href="mailto:contact@blossomapp.org" class="btn btn-primary">Get in Touch</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h3 class="footer-title">About Blossom</h3>
+          <p>A supportive companion for your healing journey after miscarriage.</p>
+        </div>
+        <div class="footer-section">
+          <h3 class="footer-title">Quick Links</h3>
+          <ul class="footer-links">
+            <li class="footer-link"><a href="index.html">Home</a></li>
+            <li class="footer-link"><a href="about-us.html">About</a></li>
+            <li class="footer-link"><a href="nhs-contact.html">NHS Support</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h3 class="footer-title">Resources</h3>
+          <ul class="footer-links">
+            <li class="footer-link"><a href="nhs-contact.html">NHS Support</a></li>
+            <li class="footer-link"><a href="#">Miscarriage Association</a></li>
+            <li class="footer-link"><a href="#">Helplines</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 Blossom v1.0 | <a href="#">Feedback</a> | <a href="#">Privacy Policy</a></p>
+        <p class="text-muted">This app is for support only and does not replace professional medical advice.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/storage.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Check if storage is initialized
+      if (typeof Storage !== 'undefined' && Storage.init) {
+        try {
+          Storage.init();
+        } catch (error) {
+          console.error('Error initializing storage:', error);
+        }
+      }
+      
+      // No authentication required for the About page - it's publicly accessible
+    });
+  </script>
+</body>
+</html>
